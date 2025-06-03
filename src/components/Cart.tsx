@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 
-const ProductCard = () => {
+const Cart = () => {
   return (
     <Fragment>
       <a
@@ -15,11 +15,11 @@ const ProductCard = () => {
           far, in reverse chronological order.
         </p>
         <button className="px-4 py-2 text-white bg-blue-400 rounded hover:bg-blue-500">
-          Сагсанд нэмэх
+          Устгах
         </button>
       </a>
     </Fragment>
   );
 };
 
-export default ProductCard;
+export default Cart;
