@@ -34,15 +34,18 @@ Route Handler API ашиглаж backend талын үйлдлүүдийг ши�
 
 ## Техникийн шаардлага
 
-- Frontend: Next.js React 
-- Backend: Next.js Route Handlers (/api)
+Frontend:
+- Framework: Next.js  
 - Style: TailwindCSS
 - Authentication: NextAuth.js
-- ORM: Prisma ORM
+- API: Next.js route handler
+- Session Cookie
+
+Backend: 
+- ORM: Prisma
 - Database: MySQL
 - Encryption: bcrypt.js 
-- Session/Cookies: HTTP-only cookies ашиглан хадгалах
-- Deployment: Vercel / Railway / Local server
+- Deployment: Docker, Kubernetes?
 
 
 

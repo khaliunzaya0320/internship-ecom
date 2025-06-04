@@ -1,12 +1,17 @@
 import Link from "next/link";
 
-export default function AccountLayout({children}){
+export default function AccountLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>){
+  
   return (
 
     <div className="flex min-h-screen">
       <aside className="w-64 bg-white p-6 border-r border-gray-200">
         <nav className="flex flex-col space-y-2">
-          <Link href="/account" className="hover:bg-gray-100 px-4 py-2 rounded">
+          <Link href="/account/profile" className="hover:bg-gray-100 px-4 py-2 rounded">
             Хувийн мэдээлэл
           </Link>
           <Link href="/account/order" className="hover:bg-gray-100 px-4 py-2 rounded">
