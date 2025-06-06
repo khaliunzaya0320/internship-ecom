@@ -5,11 +5,17 @@ export default function AuthLayout({
 }: {
   children: React.ReactNode;
 }) {
-  console.log("auth layout");
+  
   return (
     <Fragment>
-      <div>Auth Layout</div>
-      <main>{children}</main>
+      <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100 text-center">
+        <main className="bg-white p-8 rounded-sm shadow-md w-full max-w-md">
+          
+          {children}
+
+        </main>
+      </div>
     </Fragment>
   );
+  
 }

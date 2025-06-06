@@ -1,9 +1,7 @@
 import { Metadata } from "next";
 import "../styles/globals.css";
-import Link from "next/link";
 import React from "react";
-import NavBar from "@/components/NavBar";
-import Footer from "@/components/Footer";
+import '../styles/globals.css'
 
 
 export const metadata: Metadata = {
@@ -16,14 +14,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>){
+
   return (
     <html lang="en">
       <body className="bg-gray-100">
-        <NavBar/>
+        
         {children}
-        <Footer/>
+        
       </body>
-      
     </html>
   );
+  
 }

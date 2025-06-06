@@ -1,3 +1,43 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@layer base{
+
+}
+
+@layer components{
+  .form-input {
+    @apply p-2 border rounded-md w-full;
+  }
+
+  .form-button{
+    @apply bg-gray-200 rounded-lg w-96 p-2 mt-2 hover:bg-gray-300;
+  }
+
+  .underlined-button{
+    @apply text-blue-500 underline hover:text-blue-700;
+  }
+
+  .primary-header{
+    @apply text-2xl font-semibold m-2;
+  }
+
+  .secondary-header{
+    @apply text-lg font-medium m-2;
+  }
+
+
+  .side-menu-button{
+    @apply hover:bg-gray-100 px-4 py-2 rounded;
+  }
+
+  .navbar-menu{
+    @apply flex flex-col items-center
+  }
+
+  .menu-icon{
+    @apply w-4 h-4;
+  }
+}

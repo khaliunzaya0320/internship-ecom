@@ -4,8 +4,6 @@ import Image from "next/image";
 
 const Cart = () => {
 
-  const cartItems = true
-
   return (
     // <Fragment>
     //   <a
@@ -25,26 +23,38 @@ const Cart = () => {
     //   </a>
     // </Fragment>
 
-    <div className="absolute p-4 rounded bg-slate-200 flex flex-col gap-4">Cart
-      {!cartItems ? (
-        <div className="">Сагс хоосон байна</div>
-      ) : (    
-        <div className="">
-          <Image 
-            className="rounded"
-            src="/product1.webp"
-            alt=""
-            width={96}
-            height={112}
-          />
+    <div className="flex items-start justify-between gap-4 p-4 mt-2 border rounded bg-white">Cart
+        
+      <Image
+        src="/product1.webp"
+        alt=""
+        width={80}
+        height={80}
+      />
           
-          <div className="justify-between w-full">
-            <h3 className="font-semibold">Бүтээгдэхүүн нэр</h3>
-            <div>Үнэ</div>
-            
+      <div className="flex-1">
+        <h3 className="font-semibold">Бүтээгдэхүүн нэр</h3>
+          <div className="flex gap-2 mt-1 text-sm items-center"> 
+            <span className="">Үлдэгдэл: 1</span>
           </div>
+      </div>
+
+      <div className="flex items-center gap-2">
+        <div className="text-right mr-4">
+          <div className="text-sm font-semibold">1000 ₮</div>
         </div>
-      )}
+
+        <div className="flex items-center border rounded gap-4 p-1">
+          <button>-</button>
+          <div>1</div>
+          <button>+</button>
+        </div>
+
+        <div>1000 ₮</div>
+      </div>
+
+         
+
     </div>
   )
 }
