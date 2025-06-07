@@ -2,9 +2,9 @@ import Menu from "./Menu";
 import Link from "next/link";
 import SearchBar from "./SearchBar";
 
-const NavBar = () => {
+const Header = () => {
   return (
-    <header className="bg-white shadow h-16 flex items-center justify-between px-4 sm:px-8">
+    <div className="bg-white shadow h-16 flex items-center justify-between px-4 sm:px-8">
       
       <div className="text-lg font-bold text-gray-700">
         <Link href="/">E-Commerce</Link>
@@ -13,8 +13,8 @@ const NavBar = () => {
       <SearchBar/>
       <Menu />
       
-    </header>
+    </div>
   );
-};
+}
 
-export default NavBar;
+export default Header;

@@ -8,7 +8,9 @@ const nextConfig: NextConfig = {
       'www.axis-y.com', 
       'encrypted-tbn0.gstatic.com', 
       'cdn.shopify.com',
-      'glowtime.mu'
+      'glowtime.mu',
+      'pretties.com.hk',
+      'shopdama.ca'
     ],
   },
 }

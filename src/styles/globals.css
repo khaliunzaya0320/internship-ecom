@@ -40,4 +40,18 @@
   .menu-icon{
     @apply w-4 h-4;
   }
+
+  .default-button{
+    @apply w-36 py-2 px-4 rounded-3xl text-sm bg-slate-200 hover:bg-slate-300;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar{
+    display: none;
+  }
+
+  .scrollbar-hide{
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
 }

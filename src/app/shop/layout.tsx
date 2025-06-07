@@ -1,4 +1,4 @@
-import NavBar from "@/components/NavBar";
+import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export default function ShopLayout({
@@ -10,7 +10,7 @@ export default function ShopLayout({
   return (
     <div>
       <div className="bg-gray-100">
-        <NavBar/>
+        <Header/>
         {children}
         <Footer/>
       </div>
