@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { ImageIcon } from "lucide-react";
 
 const ProductCard = () => {
   return (
@@ -22,23 +23,38 @@ const ProductCard = () => {
     //   </a>
     // </Fragment>
 
-    <div className="w-48 bg-white border border-gray-100 rounded-md">
-      <Link href="#" className="w-full flex flex-col">
-        <div className="relative w-full h-48 rounded-t-md overflow-hidden">
-          <Image src="/product1.webp" alt="" fill sizes="25vw"/>
-        </div>
-        <div className="text-xs p-3">
-          <div className="flex justify-between items-center ">
-            <span className="font-medium text-sm">Бүтээгдэхүүн нэр</span>
-            <span className="">50,000₮</span>
-          </div>          
-            <span className="font-thin block mt-1">Ангилал</span>
-        </div>
-        <button className="mb-4 h-6 w-36 text-xs text-white bg-gray-400 rounded-full hover:bg-gray-500 mx-auto">
-           Сагсанд нэмэх
-        </button>
-      </Link>
+    <div className="w-64 bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden mb-4">
+      <Link href={"/shop/product/{id}"} className="h-full flex flex-col">
 
+        {/* Image */}
+        <div className="relative flex w-full h-48 bg-gray-200 items-center justify-center">
+          {/* <ImageIcon/> */}
+          <Image
+            src="/product1.webp"
+            alt=""
+            fill
+            className="object-cover"
+          />
+        </div>
+
+        {/* Info */}
+        <div className="flex flex-col justify-between flex-grow p-4">
+          <div className="mb-2">
+            <h3 className="font-medium text-base text-gray-800">Бүтээгдэхүүн нэр</h3>
+            <p className="text-sm text-gray-500 mt-1">Ангилал</p>
+          </div>          
+          <div className="flex justify-between items-center mt-auto">
+            <span className="font-bold  text-cyan-800-">50,000₮</span>
+          </div>
+        </div>
+
+        <div className="p-4 pt-0">
+          <button className="w-full py-2 text-sm rounded-full text-white bg-rose-500 hover:bg-rose-600">
+            Сагсанд нэмэх
+          </button>
+        </div>
+
+      </Link>
     </div>
   );
 };

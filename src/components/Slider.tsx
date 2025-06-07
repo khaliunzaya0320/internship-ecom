@@ -8,21 +8,21 @@ const slides = [
     id: 1,
     title: "Heartleaf My Type Calming Cream",
     img: "https://cdn.shopify.com/s/files/1/1074/9876/files/axis-y-heartleaf-my-type-calming-cream-main-2_1024x1024_1080x_dbed1972-a0ba-4fa9-b809-57769b2bed53.webp?v=1729034961",
-    url: "/",
+    url: "/shop/product/{id}",
     bg: "bg-gradient-to-r from-blue-50 to-yellow-50"
   },
   {
     id: 2,
     title: "Daily Purifying Treatment Toner",
     img: "https://glowtime.mu/wp-content/uploads/2022/03/axis-y-daily-purifying-treatment-toner.png",
-    url: "/",
+    url: "/shop/product/{id}",
     bg: "bg-gradient-to-r from-blue-50 to-yellow-50"
   },
   {
     id: 3,
     title: "Dark Spot Correcting Glow Cream",
     img: "https://www.axis-y.com/cdn/shop/files/Glow_Cream.png?v=1730435480",
-    url: "/",
+    url: "/shop/product/{id}",
     bg: "bg-gradient-to-r from-blue-50 to-yellow-50"
   }
 ];
@@ -50,7 +50,7 @@ const Slider = () => {
                 {slide.title}
               </h1>
               <Link href={slide.url}>
-                <button className="rounded-full bg-gray-400 text-white py-2 px-4 hover:bg-gray-500">
+                <button className="rounded-full bg-rose-500 text-white py-2 px-4 hover:bg-rose-600">
                   Худалдан авах
                 </button>
               </Link>
@@ -74,7 +74,7 @@ const Slider = () => {
         
         {slides.map((slide, index) => (
           <div
-            className={`w-2 h-2  rounded-full ring-1 ring-gray-400 cursor-pointer flex justify-center ${
+            className={`w-2 h-2  rounded-full ring-1 ring-rose-500 cursor-pointer flex justify-center ${
               current === index ? "scale-125" : ""
             }`}
             key={slide.id}

@@ -9,7 +9,7 @@ const SideMenu = () => {
             Хувийн мэдээлэл
           </Link>
           <Link href="/shop/account/wishlist" className="side-menu-button">
-            Хүслийн жагсаалт
+            Хадгалсан
           </Link>
           <Link href="/shop/account/order" className="side-menu-button">
             Захиалга

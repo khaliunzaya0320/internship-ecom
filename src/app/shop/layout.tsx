@@ -9,7 +9,7 @@ export default function ShopLayout({
   
   return (
     <div>
-      <div className="bg-gray-100">
+      <div className="">
         <Header/>
         {children}
         <Footer/>

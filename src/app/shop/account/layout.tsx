@@ -10,7 +10,7 @@ export default function AccountLayout({
   return (
     <div className="">
       
-      <main className="flex m-2">
+      <main className="flex">
 
         <SideMenu/>
         {children}
