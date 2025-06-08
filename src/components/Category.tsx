@@ -5,33 +5,47 @@ import { Smartphone, Baby, Gamepad2, BookOpen, Brush, HeartPulse, Home, Dumbbell
 
 const categories = [
   
-  {name: "Эмэгтэй", icon:<User size={40}/>},
-  {name: "Эрэгтэй", icon:<User size={40}/>},
-  {name: "Хүүхдийн", icon:<Baby size={40}/>},
-  {name: "Технологи", icon:<Smartphone size={40}/>},
-  {name: "Спорт", icon:<Dumbbell size={40}/>},
-  {name: "Гоёл чимэглэл", icon:<Gem size={40}/>},
-  {name: "Гэр ахуй", icon:<Home size={40}/>},
-  {name: "Хүнс", icon:<EggFried size={40}/>},
-  {name: "Цахилгаан хэрэгсэл", icon:<Plug size={40}/>},
-  {name: "Эрүүл мэнд", icon:<HeartPulse size={40}/>},
-  {name: "Гоо сайхан", icon:<Brush size={40}/>},
-  {name: "Бичиг хэрэг", icon:<BookOpen size={40}/>},
-  {name: "Тоглоом", icon:<Gamepad2 size={40}/>},
+  {name: "Эмэгтэй", slug:"women", icon:<User size={40}/>},
+  {name: "Эрэгтэй", slug:"men", icon:<User size={40}/>},
+  {name: "Хүүхдийн", slug:"kids", icon:<Baby size={40}/>},
+  {name: "Технологи", slug:"technology", icon:<Smartphone size={40}/>},
+  {name: "Спорт", slug:"sport", icon:<Dumbbell size={40}/>},
+  {name: "Гоёл чимэглэл", slug:"jewelry", icon:<Gem size={40}/>},
+  {name: "Гэр ахуй", slug:"home", icon:<Home size={40}/>},
+  {name: "Хүнс", slug:"food", icon:<EggFried size={40}/>},
+  {name: "Цахилгаан хэрэгсэл", slug:"electronics", icon:<Plug size={40}/>},
+  {name: "Эрүүл мэнд", slug:"health", icon:<HeartPulse size={40}/>},
+  {name: "Гоо сайхан", slug:"beauty", icon:<Brush size={40}/>},
+  {name: "Бичиг хэрэг", slug:"stationary", icon:<BookOpen size={40}/>},
+  {name: "Тоглоом", slug:"game", icon:<Gamepad2 size={40}/>},
 ]
 
-const Category = () => {
+// components/Category.tsx
+interface CategoryProps {
+  layout?: 'row' | 'grid';
+}
+
+const Category = ({ layout = 'row' }: CategoryProps) => {
+  const containerClass =
+    layout === 'grid'
+      ? 'grid grid-cols-2 gap-y-2 gap-x-28'
+      : 'flex gap-4';
+
   return (
-    <>
+    <div className={containerClass}>
       {categories.map((cat, index) => (
-        <Link key={index} href="#" className="min-w-[100px]">
-          <div className="w-24 h-28 flex flex-col items-center justify-center bg-white rounded-xl shadow-sm hover:shadow-md hover:text-rose-500">
+        <Link
+          key={index}
+          href={`/shop/category/${cat.slug || cat.name}`}
+          className="w-full"
+        >
+          <div className="h-28 w-24 flex flex-col items-center justify-center bg-white rounded-xl shadow-sm hover:shadow-md hover:text-rose-500">
             <div className="text-primary">{cat.icon}</div>
             <h2 className="text-sm text-center mt-2">{cat.name}</h2>
           </div>
         </Link>
       ))}
-    </>
+    </div>
   );
 };
 

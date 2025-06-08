@@ -13,7 +13,7 @@ const HomePage = () =>{
 
         <h1 className="primary-header pt-8">Ангиллаар дэлгүүр хэсэх</h1>
         <div className=" touch-auto flex w-full overflow-x-scroll flex-nowrap -hide gap-4 py-4"> 
-          <Category />
+          <Category layout="row"/>
         </div>
 
         <h1 className="primary-header pt-8">Онцлох бүтээгдэхүүн</h1>
