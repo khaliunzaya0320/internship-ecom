@@ -11,11 +11,11 @@
 
   /* Form styles */
   .form-input {
-    @apply flex p-2 border rounded-md w-96;
+    @apply flex p-2 border rounded-md items-center w-full;
   }
 
   .form-button{
-    @apply rounded-lg w-96 p-2 mt-2 text-white bg-rose-500 hover:bg-rose-600;
+    @apply rounded-lg items-center p-2 mt-2 text-white bg-rose-500 hover:bg-rose-600;
   }
 
   .underlined-button{
@@ -23,7 +23,7 @@
   }
 
   .next-auth-button{
-    @apply border rounded-lg w-96 p-2 mt-2 text-slate-900 ;
+    @apply border rounded-lg p-2 mt-2 w-full text-slate-900 ;
   }
 
 

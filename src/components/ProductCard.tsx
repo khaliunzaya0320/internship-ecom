@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ImageIcon } from "lucide-react";
+import { Heart, ImageIcon } from "lucide-react";
 
 const ProductCard = () => {
   return (
@@ -24,10 +24,10 @@ const ProductCard = () => {
     // </Fragment>
 
     <div className="w-64 bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden mb-4">
-      <Link href={"/shop/product/{id}"} className="h-full flex flex-col">
+      <div className="h-full flex flex-col">
 
         {/* Image */}
-        <div className="relative flex w-full h-48 bg-gray-200 items-center justify-center">
+        <Link href={"/shop/product/{id}"} className="relative flex w-full h-48 bg-gray-200 items-center justify-center">
           {/* <ImageIcon/> */}
           <Image
             src="/product1.webp"
@@ -35,14 +35,15 @@ const ProductCard = () => {
             fill
             className="object-cover"
           />
-        </div>
+        </Link>
 
         {/* Info */}
         <div className="flex flex-col justify-between flex-grow p-4">
-          <div className="mb-2">
+          <div className="flex items-center justify-between mb-2">
             <h3 className="font-medium text-base text-gray-800">Бүтээгдэхүүн нэр</h3>
-            <p className="text-sm text-gray-500 mt-1">Ангилал</p>
+            <button><Heart className="menu-icon hover:text-rose-600"/></button>
           </div>          
+            <p className="text-sm text-gray-500 mt-1">Ангилал</p>
           <div className="flex justify-between items-center mt-auto">
             <span className="font-bold  text-cyan-800-">50,000₮</span>
           </div>
@@ -54,7 +55,7 @@ const ProductCard = () => {
           </button>
         </div>
 
-      </Link>
+      </div>
     </div>
   );
 };

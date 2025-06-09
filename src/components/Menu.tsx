@@ -8,7 +8,7 @@ import { Bell, Heart, ShoppingCart, User } from "lucide-react"
 const Menu = () => {
 
   const pathname = usePathname()
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
   const dropdownRef = useRef(null)
 
   const menuItems = [
