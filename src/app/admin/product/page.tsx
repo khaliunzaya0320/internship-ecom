@@ -74,6 +74,7 @@ const AdminProductPage = () => {
 
           <thead>
             <tr className="bg-white text-gray-700 text-left text-xs">
+              <th className="px-4 py-2">ID</th>
               <th className="px-4 py-2">Нэр</th>
               <th className="px-4 py-2">Ангилал</th>
               <th className="px-4 py-2">Тайлбар</th>
@@ -88,6 +89,7 @@ const AdminProductPage = () => {
           <tbody>
           {product.map((p) => (
               <tr key={p.id} className="border-t ">
+                <td className="px-4 py-2">{p.id}</td>
                 <td className="px-4 py-2">{p.name}</td>
                 <td className="px-4 py-2">{p.category}</td>
                 <td className="px-4 py-2">{p.description}</td>

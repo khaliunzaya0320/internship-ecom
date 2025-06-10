@@ -16,7 +16,7 @@ type Order = {
 const testdata: Order[] = [
   {
     id: "O001",
-    user: "Болороо",
+    user: "User",
     userId: "U123",
     products: "Cream",
     total: 50000,
