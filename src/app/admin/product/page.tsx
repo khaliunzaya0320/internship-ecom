@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
 import { Category } from '@/generated/prisma'
 
 
@@ -16,42 +15,6 @@ type Product = {
   createdAt: Date
   updatedAt: Date
 }
-
-// const testdata = [
-//   {
-//     id: "P001",
-//     name: "Cream",
-//     category: "Гоо сайхан",
-//     description: "",
-//     price: 1000,
-//     stock: 10,
-//     imageUrl: "https...",
-//     createdAt: "2025/06/09",
-//     updatedAt: ""
-//   },
-//   {
-//     id: "P002",
-//     name: "Cream",
-//     category: "Гоо сайхан",
-//     description: "",
-//     price: 1000,
-//     stock: 10,
-//     imageUrl: "https...",
-//     createdAt: "2025/06/09",
-//     updatedAt: ""
-//   },
-//   {
-//     id: "P003",
-//     name: "Cream",
-//     category: "Гоо сайхан",
-//     description: "Cream",
-//     price: 1000,
-//     stock: 10,
-//     imageUrl: "https...",
-//     createdAt: "2025/06/09",
-//     updatedAt: ""
-//   },
-// ]
 
 
 const AdminProductPage = () => {
@@ -135,7 +98,7 @@ const AdminProductPage = () => {
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
-      <h2 className="secondary-header">Бүтээгдэхүүний жагсаалт</h2>
+        <h2 className="secondary-header">Бүтээгдэхүүний жагсаалт</h2>
         <button onClick={() => openModal()}className="admin-button-blue">+ Бүтээгдэхүүн нэмэх
         </button>
       </div>
@@ -144,32 +107,32 @@ const AdminProductPage = () => {
         <table className="admin-table">
           <thead className=''>
             <tr className="text-xs text-left">
-              <th className="px-2 py-2 w-4">№</th>
+              <th className="px-2 py-2 ">№</th>
               <th className="px-2 py-2">Нэр</th>
               <th className="px-2 py-2">Ангилал</th>
               <th className="px-2 py-2">Тайлбар</th>
-              <th className="px-2 py-2 w-6">Үнэ</th>
-              <th className="px-2 py-2 w-4">Нөөц</th>
-              <th className="px-2 py-2">Зургийн URL</th>
-              <th className="px-2 py-2 w-20">Огноо</th>
-              <th className="px-2 py-2 w-36">Үйлдэл</th>
+              <th className="px-2 py-2">Үнэ</th>
+              <th className="px-2 py-2">Нөөц</th>
+              <th className="px-2 py-2 ">Зургийн URL</th>
+              <th className="px-2 py-2 ">Огноо</th>
+              <th className="px-2 py-2 w-28">Үйлдэл</th>
             </tr>
           </thead>
 
           <tbody>
             {product.map((p, idx) => (
-              <tr key={p.id} className="border-t">
+              <tr key={p.id} className="border-t text-xs">
                 <td className="px-2 py-2">{idx + 1}</td>
                 <td className="px-2 py-2">{p.name}</td>
                 <td className="px-2 py-2">{p.category?.name}</td>
                 <td className="px-2 py-2">{p.description}</td>
                 <td className="px-2 py-2">{p.price}₮</td>
                 <td className="px-2 py-2">{p.stock}</td>
-                <td className="px-2 py-2">{p.imageUrl}</td>
+                <td className="px-2 py-2 ">{p.imageUrl}</td>
                 <td className="px-2 py-2">{new Date(p.createdAt).toLocaleDateString()}</td>
                 <td className="px-2 py-2 space-x-2">
-                <button onClick={() => openModal(p)} className="text-blue-600">Засах</button>
-                <button onClick={() => handleDelete(p.id)} className="text-red-600">Устгах</button>
+                <button onClick={() => openModal(p)} className="text-blue-600 text-sm hover:underline">Засах</button>
+                <button onClick={() => handleDelete(p.id)} className="text-red-600 text-sm hover:underline">Устгах</button>
                 </td>
               </tr>
             ))}
