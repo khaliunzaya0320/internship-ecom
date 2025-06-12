@@ -1,36 +1,30 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
-type User = {
-  id: string
+type User = { 
+  id: number
   name: string
   email: string
-  password: string
   role: string
-  orders: string
+  orders: number 
 }
 
-const testUsers: User[] = [
-  {
-    id: 'U001',
-    name: 'Болор',
-    email: 'bolor@gmail.com',
-    password: '********',
-    role: 'user',
-    orders: '2',
-  },
-  {
-    id: 'U002',
-    name: 'Od',
-    email: 'od@com',
-    password: '********',
-    role: 'user',
-    orders: '4',
-  },
-]
-
 const AdminUsersPage = () => {
+  const [users, setUsers] = useState<User[]>([])
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const res = await fetch('/api/user') 
+      const data = await res.json()
+      setUsers(data)
+    }
+
+    fetchUsers()
+  }, [])
+
+  
   return (
     <div className="p-4">
       <h2 className="secondary-header mb-4">Хэрэглэгчийн жагсаалт</h2>
@@ -47,7 +41,7 @@ const AdminUsersPage = () => {
             </tr>
           </thead>
           <tbody>
-            {testUsers.map((user) => (
+            {users.map((user) => (
               <tr key={user.id} className="border-t text-sm">
                 <td className="px-4 py-2">{user.name}</td>
                 <td className="px-4 py-2">{user.email}</td>

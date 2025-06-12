@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link";
-import { List, UserPen, LogOut, Cuboid } from "lucide-react";
+import { ListCheck, UserPen, LogOut, Cuboid, Folders } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 
@@ -8,9 +8,10 @@ const AdminMenu = () => {
 
   const pathname = usePathname();  
   const sideMenuItems = [
-    { href: "/admin/product", label: "Бүтээгдэхүүн", icon: <List className="menu-icon" /> },
-    { href: "/admin/orders", label: "Захиалга", icon: <Cuboid className="menu-icon" /> },
-    { href: "/admin/users", label: "Хэрэглэгч", icon: <UserPen className="menu-icon" /> },
+    { href: "/admin/product", label: "Бүтээгдэхүүн", icon: <ListCheck  className="menu-icon" /> },
+    { href: "/admin/category", label: "Ангилал", icon: <Folders className="menu-icon" /> },
+    { href: "/admin/order", label: "Захиалга", icon: <Cuboid className="menu-icon" /> },
+    { href: "/admin/user", label: "Хэрэглэгч", icon: <UserPen className="menu-icon" /> },
     { href: "/admin/auth/logout", label: "Системээс гарах", icon: <LogOut className="menu-icon" /> },
   ];
 

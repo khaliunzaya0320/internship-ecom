@@ -77,4 +77,18 @@
     scrollbar-width: none;
   }
 
+
+  /* Admin */
+  .admin-button-bordered{
+    @apply px-4 py-2 border rounded hover:bg-gray-50
+  }
+
+  .admin-button-blue{
+    @apply px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700
+  }
+
+  .admin-table{
+    @apply min-w-full table-auto bg-white border
+  }
+
 }

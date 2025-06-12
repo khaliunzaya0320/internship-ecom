@@ -30,7 +30,7 @@ model Product{
   stock Int
   imageUrl String
   createdAt DateTime @default(now())
-  updatedAt DateTime
+  updatedAt DateTime @updatedAt
   orderItems OrderItem[]
   cartItems CartItem[]
   wishlist Wishlist[]
