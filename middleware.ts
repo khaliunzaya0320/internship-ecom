@@ -12,7 +12,7 @@ export default withAuth(
     }    // Нэвтрээгүй хэрэглэгчийг login хуудасруу чиглүүлэх
     if (
       !req.nextauth.token &&
-      (req.nextUrl.pathname.startsWith("/shop/account") ||
+      (req.nextUrl.pathname.startsWith("/account") ||
        req.nextUrl.pathname.startsWith("/shop/cart"))
     ) {
       return NextResponse.redirect(new URL("/auth/login", req.url));
@@ -25,7 +25,7 @@ export default withAuth(
           return token?.role === "ADMIN";
         }        // Account болон cart хуудаснууд - нэвтрэх шаардлагатай
         if (
-          req.nextUrl.pathname.startsWith("/shop/account") ||
+          req.nextUrl.pathname.startsWith("/account") ||
           req.nextUrl.pathname.startsWith("/shop/cart")
         ) {
           return !!token;
@@ -38,5 +38,5 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: ["/admin/:path*", "/shop/account/:path*", "/shop/cart/:path*"],
+  matcher: ["/admin/:path*", "/account/:path*", "/shop/cart/:path*"],
 };

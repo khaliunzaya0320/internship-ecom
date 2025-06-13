@@ -14,10 +14,13 @@ model User{
   email String @unique
   password String
   role String @default("USER")
+  phone String?
   orders Order[]
   cartItems CartItem[]
   wishlist Wishlist[]
   notifications Notification[]
+  addresses Address[]
+  viewedProducts ViewedProduct[]
 }
 
 model Product{  
@@ -34,6 +37,7 @@ model Product{
   orderItems OrderItem[]
   cartItems CartItem[]
   wishlist Wishlist[]
+  viewedProducts ViewedProduct[]
 }
 
 model Order{
@@ -86,6 +90,32 @@ model Notification{
   user User @relation(fields: [userId], references: [id])
   userId Int
   createdaAt DateTime @default(now())
+}
+
+model Address{
+  id Int @id @default(autoincrement())
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+  title String
+  fullName String
+  phone String
+  address String
+  city String
+  district String?
+  isDefault Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ViewedProduct{
+  id Int @id @default(autoincrement())
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+  product Product @relation(fields: [productId], references: [id])
+  productId Int
+  viewedAt DateTime @default(now())
+
+  @@unique([userId, productId])
 }
 
 enum Role{
