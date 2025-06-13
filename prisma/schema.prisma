@@ -32,12 +32,22 @@ model Product{
   price Float
   stock Int
   imageUrl String
+  images ProductImage[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   orderItems OrderItem[]
   cartItems CartItem[]
   wishlist Wishlist[]
   viewedProducts ViewedProduct[]
+}
+
+model ProductImage {
+  id Int @id @default(autoincrement())
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+  imageUrl String
+  isPrimary Boolean @default(false)
+  createdAt DateTime @default(now())
 }
 
 model Order{
@@ -63,6 +73,9 @@ model OrderItem{
 model Category{
  id Int @id @default(autoincrement())
  name String
+ description String?
+ imageUrl String?
+ featured Boolean @default(false)
  products Product[]
 }
 
@@ -114,8 +127,19 @@ model ViewedProduct{
   product Product @relation(fields: [productId], references: [id])
   productId Int
   viewedAt DateTime @default(now())
-
   @@unique([userId, productId])
+}
+
+model Slider {
+  id Int @id @default(autoincrement())
+  title String
+  description String?
+  imageUrl String
+  linkUrl String?
+  isActive Boolean @default(true)
+  order Int @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum Role{
@@ -125,5 +149,7 @@ enum Role{
 
 enum OrderStatus{
   PENDING
+  SHIPPED
   DELIVERED
+  CANCELLED
 }
