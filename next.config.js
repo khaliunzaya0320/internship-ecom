@@ -2,9 +2,9 @@
 const nextConfig = {
     serverExternalPackages: [],
     webpack: (config, { isServer }) => {
-        // Exclude problematic Windows directories from file watching
+        // Completely disable file watching for problematic Windows directories
         config.watchOptions = {
-            ...config.watchOptions,
+            poll: false,
             ignored: [
                 '**/node_modules/**',
                 '**/.git/**',
@@ -12,11 +12,29 @@ const nextConfig = {
                 '**/node_modules',
                 '**/.git',
                 '**/.next',
-                '**/C:/Users/*/Application Data/**',
-                '**/C:/Users/*/AppData/**',
-                '**/C:/ProgramData/**',
+                /C:[\\\/]Users[\\\/][^\\\/]+[\\\/]Application Data/,
+                /C:[\\\/]Users[\\\/][^\\\/]+[\\\/]AppData/,
+                /C:[\\\/]Users[\\\/][^\\\/]+[\\\/]Cookies/,
+                /C:[\\\/]Users[\\\/][^\\\/]+[\\\/]Local Settings/,
+                /C:[\\\/]Users[\\\/][^\\\/]+[\\\/]My Documents/,
+                /C:[\\\/]Users[\\\/][^\\\/]+[\\\/]NetHood/,
+                /C:[\\\/]Users[\\\/][^\\\/]+[\\\/]PrintHood/,
+                /C:[\\\/]Users[\\\/][^\\\/]+[\\\/]Recent/,
+                /C:[\\\/]Users[\\\/][^\\\/]+[\\\/]SendTo/,
+                /C:[\\\/]Users[\\\/][^\\\/]+[\\\/]Start Menu/,
+                /C:[\\\/]Users[\\\/][^\\\/]+[\\\/]Templates/,
+                /C:[\\\/]ProgramData/,
+                /C:[\\\/]Windows/,
+                /C:[\\\/]System Volume Information/,
             ],
         };
+
+        // Override the resolve.modules to limit where webpack looks for modules
+        config.resolve.modules = [
+            'node_modules',
+            process.cwd() + '/src',
+            process.cwd() + '/node_modules'
+        ];
 
         // Additional webpack optimizations
         if (!isServer) {
