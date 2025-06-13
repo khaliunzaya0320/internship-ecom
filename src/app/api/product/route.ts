@@ -11,7 +11,6 @@ export async function GET() {
     return NextResponse.json(products)
   } catch (error) {
     console.error('Product fetch error:', error)
-    return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 })
   }
 }
 
@@ -21,10 +20,9 @@ export async function POST(req: Request) {
   const { name, categoryId, description, price, stock, imageUrl } = body
 
   if (!name || !categoryId || !price || !stock || !imageUrl) {
-    return NextResponse.json({ error: 'Бүх талбарыг бөглөнө үү' }, { status: 400 })
+    return NextResponse.json({ error: "Бүх талбарыг бөглөнө үү" }, { status: 400 })
   }
 
-  try {
     const newProduct = await prisma.product.create({
       data: {
         name,
@@ -39,8 +37,4 @@ export async function POST(req: Request) {
     })
 
     return NextResponse.json(newProduct)
-  } catch (error) {
-    console.error('Error saving product:', error)
-    return NextResponse.json({ error: 'Hadgalahad aldaa garlaa' }, { status: 500 })
-  }
 }

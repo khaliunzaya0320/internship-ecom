@@ -20,7 +20,6 @@ const categories = [
   {name: "Тоглоом", slug:"game", icon:<Gamepad2 size={40}/>},
 ]
 
-// components/Category.tsx
 interface CategoryProps {
   layout?: 'row' | 'grid';
 }
@@ -32,14 +31,14 @@ const Category = ({ layout = 'row' }: CategoryProps) => {
       : 'flex gap-4';
 
   return (
-    <div className={containerClass}>
+    <div className={containerClass} >
       {categories.map((cat, index) => (
         <Link
           key={index}
-          href={`/shop/category/${cat.slug || cat.name}`}
+          href={`/shop/category/${cat.name}`}
           className="w-full"
         >
-          <div className="h-28 w-24 flex flex-col items-center justify-center bg-white rounded-xl shadow-sm hover:shadow-md hover:text-rose-500">
+          <div className="h-28 w-24 flex flex-col items-center justify-center bg-white borderrounded-xl shadow-sm hover:shadow-md hover:text-rose-500">
             <div className="text-primary">{cat.icon}</div>
             <h2 className="text-sm text-center mt-2">{cat.name}</h2>
           </div>

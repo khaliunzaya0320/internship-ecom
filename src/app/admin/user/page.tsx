@@ -1,5 +1,4 @@
 "use client"
-
 import { useEffect, useState } from 'react'
 
 type User = {
@@ -55,7 +54,7 @@ const AdminUsersPage = () => {
     e.preventDefault()
 
     if (!name || !email || !role) {
-      alert('Бүх талбарыг бөглөнө үү')
+      alert("Бүх талбарыг бөглөнө үү")
       return
     }
 
@@ -69,20 +68,14 @@ const AdminUsersPage = () => {
       headers: { 'Content-Type': 'application/json' },
       body,
     })
+    await fetchUsers()
+    closeModal()
 
-    if (res.ok) {
-      await fetchUsers()
-      closeModal()
-    } else {
-      alert('Хадгалахад алдаа гарлаа')
-    }
   }
 
   const deleteUser = async (userId: number) => {
-    if (!confirm('Хэрэглэгчийг устгах уу?')) return
     const res = await fetch(`/api/user/${userId}`, { method: 'DELETE' })
-    if (res.ok) fetchUsers()
-    else alert('Алдаа гарлаа')
+    fetchUsers()
   }
 
   return (

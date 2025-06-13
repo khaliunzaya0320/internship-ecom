@@ -9,7 +9,7 @@ export async function PUT(
   const { role } = await req.json();
 
   if (!["USER", "ADMIN"].includes(role)) {
-    return new NextResponse("Invalid role", { status: 400 });
+    return new NextResponse("Invalid", { status: 400 });
   }
 
   try {
@@ -21,7 +21,6 @@ export async function PUT(
     return NextResponse.json(updatedUser);
   } catch (error) {
     console.error("PUT /api/user/[id] алдаа:", error);
-    return new NextResponse("Шинэчлэх үед алдаа гарлаа", { status: 500 });
   }
 }
 
@@ -41,8 +40,5 @@ export async function DELETE(
     });
   } catch (error) {
     console.error("DELETE /api/user/[id] алдаа:", error);
-    return new NextResponse(JSON.stringify({ message: "Алдаа гарлаа" }), {
-      status: 500,
-    });
   }
 }

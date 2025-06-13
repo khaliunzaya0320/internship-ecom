@@ -11,7 +11,6 @@ const CartPage = () => {
       {/* Cart */}
       <div className="lg:w-3/5 w-full">
 
-        {/* Header, Clear cart button */}
         <div className="flex justify-between items-center mb-4">
           <h2 className="primary-header">Таны сагс</h2>
           <button className="bg-white p-2 rounded-md flex items-center gap-2 text-sm hover:bg-gray-50 border text-gray-700">

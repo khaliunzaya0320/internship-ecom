@@ -12,6 +12,7 @@ const Profile = () => {
 
   return (
     <div>
+      
       {/* Tab selection */}
       <div className="flex">
         {tabs.map((tab, index) =>(

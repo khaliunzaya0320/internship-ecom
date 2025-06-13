@@ -10,7 +10,8 @@ const nextConfig: NextConfig = {
       'cdn.shopify.com',
       'glowtime.mu',
       'pretties.com.hk',
-      'shopdama.ca'
+      'shopdama.ca',
+      'cdnp.cody.mn'
     ],
   },
 }

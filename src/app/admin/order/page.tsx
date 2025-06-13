@@ -1,14 +1,15 @@
 "use client";
+
 import { useEffect, useState } from "react";
 
 type Order = {
   id: number;
   userId: number;
   user: string;
-  items: string[];
+  items: string[]; 
   total: number;
   status: "PENDING" | "SHIPPED";
-  createdAt: Date;
+  createdAt: Date | string;
 };
 
 const AdminOrderPage = () => {
@@ -62,8 +63,10 @@ const AdminOrderPage = () => {
             {order.map((o, idx) => (
               <tr key={o.id} className="border-t text-sm">
                 <td className="px-4 py-2">{idx + 1}</td>
-                <td className="px-4 py-2">{o.user}</td>
-                <td className="px-4 py-2">{o.items.join(", ")}</td>
+                <td className="px-4 py-2">{o.id}</td>
+                <td className="px-4 py-2">
+                  {Array.isArray(o.items) ? o.items.join(", ") : ""}
+                </td>
                 <td className="px-4 py-2">{o.total.toLocaleString()}₮</td>
                 <td className="px-4 py-2">{o.status}</td>
                 <td className="px-4 py-2">
@@ -94,7 +97,9 @@ const AdminOrderPage = () => {
 
             <select
               value={newStatus}
-              onChange={(e) => setNewStatus(e.target.value as "PENDING" | "SHIPPED")}
+              onChange={(e) =>
+                setNewStatus(e.target.value as "PENDING" | "SHIPPED")
+              }
               className="w-full border px-2 py-1 mb-4"
             >
               <option value="PENDING">Хүлээгдэж буй</option>

@@ -1,60 +1,74 @@
-import { Fragment } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Heart, ImageIcon } from "lucide-react";
+import LikeButton from "./LikeButton";
 
-const ProductCard = () => {
+export type ProductCardProps = {
+  product: {
+    id: number;
+    name: string;
+    category: {
+      id: number;
+      name: string;
+    } | null; 
+    description: string;
+    price: number;
+    stock: number;
+    imageUrl: string;
+    createdAt: string | Date;
+    updatedAt: string | Date;
+  };
+  isLiked?: boolean;
+  onLikeToggle?: () => void;
+};
+
+const ProductCard = ({ product, isLiked = false, onLikeToggle }: ProductCardProps) => {
+  if (!product) return null;
+
   return (
-    // <Fragment>
-    //   <a
-    //     href="#"
-    //     className="block w-48 mx-auto p-4 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-    //   >
-    //     <h5 className="mb-2 font-bold tracking-tight text-gray-900 dark:text-white">
-    //       Барааны нэр
-    //     </h5>
-    //     <p className="mb-2 font-normal text-gray-700 dark:text-gray-400">
-    //       Here are the biggest enterprise technology acquisitions of 2021 so
-    //       far, in reverse chronological order.
-    //     </p>
-    //     <button className="px-4 py-2 text-white bg-blue-400 rounded hover:bg-blue-500">
-    //       Сагсанд нэмэх
-    //     </button>
-    //   </a>
-    // </Fragment>
-
-    <div className="w-64 bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden mb-4">
+    <div className="w-64 h-96 bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden p-4">
       <div className="h-full flex flex-col">
 
         {/* Image */}
-        <Link href={"/shop/product/{id}"} className="relative flex w-full h-48 bg-gray-200 items-center justify-center">
-          {/* <ImageIcon/> */}
+        <Link
+          href={`/shop/product/${product.id}`}
+          className="relative flex w-auto h-48 bg-gray-200 items-center justify-center"
+        >
           <Image
-            src="/product1.webp"
-            alt=""
+            src={product.imageUrl}
+            alt={product.name}
             fill
             className="object-cover"
           />
         </Link>
 
         {/* Info */}
-        <div className="flex flex-col justify-between flex-grow p-4">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-medium text-base text-gray-800">Бүтээгдэхүүн нэр</h3>
-            <button><Heart className="menu-icon hover:text-rose-600"/></button>
-          </div>          
-            <p className="text-sm text-gray-500 mt-1">Ангилал</p>
-          <div className="flex justify-between items-center mt-auto">
-            <span className="font-bold  text-cyan-800-">50,000₮</span>
-          </div>
+        <div className="flex-grow pt-2">
+          <h3 className="mb-2 font-medium text-base text-gray-800">
+            {product.name}
+          </h3>
         </div>
 
-        <div className="p-4 pt-0">
-          <button className="w-full py-2 text-sm rounded-full text-white bg-rose-500 hover:bg-rose-600">
-            Сагсанд нэмэх
-          </button>
-        </div>
+        <div className="">
+            <div className="flex flex-row items-center justify-between pb-4">
+              <div>
+                <p className="text-sm text-gray-500">
+                  {product.category?.name ?? "Ангилалгүй"}
+                </p>
+                <div className="flex justify-between items-center mt-auto">
+                  <span className="font-bold">{product.price.toLocaleString()}₮</span>
+                </div>
+              </div>
 
+              <div>
+                <button onClick={onLikeToggle}>
+                  <LikeButton isLiked={isLiked} />
+                </button>
+              </div>
+            </div>
+            <button className="w-full py-2 text-sm rounded-full text-white bg-rose-500 hover:bg-rose-600">
+              Сагсанд нэмэх
+            </button>
+        </div>
       </div>
     </div>
   );

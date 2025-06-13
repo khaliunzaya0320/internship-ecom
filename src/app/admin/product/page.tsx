@@ -51,7 +51,7 @@ const AdminProductPage = () => {
     e.preventDefault()
   
     if (!nameInput || !selectedCategory || price === '' || stock === '' || !imageUrl) {
-      alert('Бүх талбарыг бөглөнө үү')
+      alert("Бүх талбарыг бөглөнө үү")
       return
     }
   
@@ -73,18 +73,14 @@ const AdminProductPage = () => {
       body
     })
   
-    if (res.ok) {
       setShowModal(false)
       setEditing(null)
       fetchProduct()
-    } else {
-      alert('Хадгалахад алдаа гарлаа.')
-    }
   }
   
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Бүтээгдэхүүнийг устгах уу?')) return
+    if (!confirm("Бүтээгдэхүүнийг устгах уу?")) return
     const res = await fetch(`/api/product/${id}`, { method: 'DELETE' })
     if (res.ok) fetchProduct()
   }

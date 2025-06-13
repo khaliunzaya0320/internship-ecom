@@ -8,7 +8,7 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, email, role } = await req.json(); // ❗ password-г хасна
+    const { name, email, role } = await req.json(); 
 
     if (!name || !email || !role) {
       return NextResponse.json({ message: "Мэдээлэл дутуу байна" }, { status: 400 });
@@ -34,6 +34,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "Амжилттай бүртгэгдлээ", user: newUser });
   } catch (error) {
     console.error("POST /api/user алдаа:", error);
-    return NextResponse.json({ message: "Серверийн алдаа" }, { status: 500 });
+    return NextResponse.json( { status: 500 });
   }
 }

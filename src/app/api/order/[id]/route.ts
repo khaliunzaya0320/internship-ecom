@@ -1,18 +1,19 @@
 import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
-  const id = Number(params.id);
-  const { status } = await req.json();
+export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+  try {
+    const { status } = await req.json();
+    const id = parseInt(params.id);
 
-  if (!["PENDING", "SHIPPED"].includes(status)) {
-    return NextResponse.json({ error: "Invalid status" }, { status: 400 });
+    const updated = await prisma.order.update({
+      where: { id },
+      data: { status },
+    });
+
+    return NextResponse.json(updated);
+  } catch (error) {
+    console.error(error);
+    return new NextResponse("PUT error", { status: 500 });
   }
-
-  const order = await prisma.order.update({
-    where: { id },
-    data: { status },
-  });
-
-  return NextResponse.json(order);
 }
