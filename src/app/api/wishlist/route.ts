@@ -12,10 +12,7 @@ export async function GET(req: NextRequest) {
         },
       },
     });
-
-    const products = wishlist.map((item) => item.product);
-
-    return NextResponse.json(products);
+    return NextResponse.json(wishlist);
   } catch (error) {
     console.error("Wishlist fetch error:", error);
     return NextResponse.json([], { status: 500 });

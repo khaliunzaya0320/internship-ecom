@@ -1,15 +1,17 @@
 "use client"
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { User, Heart, LogOut, Cuboid } from "lucide-react";
+import { User, Heart, LogOut, Cuboid, Home, Eye } from "lucide-react";
 
 const SideMenu = () => {
   const pathname = usePathname();
 
   const sideMenuItems = [
-    { href: "/shop/account/profile", label: "Хувийн мэдээлэл", icon: <User className="menu-icon" /> },
-    { href: "/shop/account/wishlist", label: "Хадгалсан", icon: <Heart className="menu-icon" /> },
-    { href: "/shop/account/order", label: "Захиалга", icon: <Cuboid className="menu-icon" /> },
+    { href: "/account", label: "Dashboard", icon: <Home className="menu-icon" /> },
+    { href: "/account/profile", label: "Хувийн мэдээлэл", icon: <User className="menu-icon" /> },
+    { href: "/account/wishlist", label: "Хадгалсан", icon: <Heart className="menu-icon" /> },
+    { href: "/account/order", label: "Захиалга", icon: <Cuboid className="menu-icon" /> },
+    { href: "/account/view", label: "Үзсэн бараа", icon: <Eye className="menu-icon" /> },
     { href: "/auth/logout", label: "Системээс гарах", icon: <LogOut className="menu-icon" /> },
   ];
 

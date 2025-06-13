@@ -1,6 +1,36 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+    const productId = parseInt(id);    const product = await prisma.product.findUnique({
+      where: { id: productId },
+      include: { 
+        category: true 
+      },
+    });
+
+    if (!product) {
+      return NextResponse.json(
+        { error: "Бүтээгдэхүүн олдсонгүй" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(product);
+  } catch (error) {
+    console.error("Product GET error:", error);
+    return NextResponse.json(
+      { error: "Бүтээгдэхүүн татахад алдаа гарлаа" },
+      { status: 500 }
+    );
+  }
+}
+
 export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }

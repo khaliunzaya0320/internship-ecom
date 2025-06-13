@@ -33,10 +33,8 @@ export const authOptions: NextAuthOptions = {
 
         if (!isPasswordValid) {
           return null;
-        }
-
-        return {
-          id: user.id,
+        }        return {
+          id: user.id.toString(),
           email: user.email,
           name: user.name,
           role: user.role,
@@ -51,16 +49,14 @@ export const authOptions: NextAuthOptions = {
         token.role = user.role;
       }
       return token;
-    },
-    async session({ session, token }) {
-      if (token) {
+    },    async session({ session, token }) {
+      if (token && session.user) {
         session.user.id = token.sub!;
         session.user.role = token.role as string;
       }
       return session;
     },
-  },
-  pages: {
-    signIn: "/login",
+  },  pages: {
+    signIn: "/auth/login",
   },
 };
