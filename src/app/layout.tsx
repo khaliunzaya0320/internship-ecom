@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import "../styles/globals.css";
 import React from "react";
 import '../styles/globals.css'
+import SessionProvider from "@/components/SessionProvider";
 
 
 export const metadata: Metadata = {
@@ -14,13 +15,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>){
-
   return (
     <html lang="en">
       <body className="bg-gray-100">
-        
-        {children}
-        
+        <SessionProvider>
+          {children}
+        </SessionProvider>
       </body>
     </html>
   );
