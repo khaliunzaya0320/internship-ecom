@@ -30,37 +30,37 @@ const Menu = () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [])
-
   return (
     <nav className="flex gap-6 text-sm font-medium items-center relative" ref={dropdownRef}>
       
-      {/* Notification dropdown */}
-      <div className="relative">
-        <button
-          onClick={() => setOpen(!open)}
-          className={`navbar-menu flex flex-col items-center ${
-            open ? "text-rose-500 font-semibold" : "text-gray-600 hover:text-rose-400"
-          }`}
-        >
-          <Bell className="menu-icon" />
-          <span>Мэдэгдэл</span>
-        </button>
+      {/* Notification dropdown - зөвхөн нэвтэрсэн хэрэглэгчдэд харуулах */}
+      {session && (
+        <div className="relative">
+          <button
+            onClick={() => setOpen(!open)}
+            className={`navbar-menu flex flex-col items-center ${
+              open ? "text-rose-500 font-semibold" : "text-gray-600 hover:text-rose-400"
+            }`}
+          >
+            <Bell className="menu-icon" />
+            <span>Мэдэгдэл</span>
+          </button>
 
-        {open && (
-          <div className="absolute -right-36 mt-4 w-80 shadow-xl border rounded-md z-50 p-4 bg-white font-normal">
-            <ul className="">
-              <li className="border-b py-4 px-2 text-sm">Захиалга цуцлагдлаа - 2025/6/9 13:35</li>
-              <li className="border-b py-2 px-2 text-sm">Захиалга цуцлагдлаа - 2025/6/9 13:35</li>
-            </ul>
-            <div className="mt-2 text-right">
-              <Link href="/shop/account/order" className="text-rose-500 hover:underline font-medium text-sm">
-                Бүгдийг харах
-              </Link>
+          {open && (
+            <div className="absolute -right-36 mt-4 w-80 shadow-xl border rounded-md z-50 p-4 bg-white font-normal">
+              <ul className="">
+                <li className="border-b py-4 px-2 text-sm">Захиалга цуцлагдлаа - 2025/6/9 13:35</li>
+                <li className="border-b py-2 px-2 text-sm">Захиалга цуцлагдлаа - 2025/6/9 13:35</li>
+              </ul>
+              <div className="mt-2 text-right">
+                <Link href="/shop/account/order" className="text-rose-500 hover:underline font-medium text-sm">
+                  Бүгдийг харах
+                </Link>
+              </div>
             </div>
-          </div>
-        )}
-
-      </div>      {/* Other menu items */}
+          )}
+        </div>
+      )}{/* Other menu items */}
       {menuItems.map((item, index) => {
         const isActive = pathname === item.href
         return (
