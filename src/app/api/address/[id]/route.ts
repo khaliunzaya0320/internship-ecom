@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma';
 
 export async function PUT(
     req: NextRequest,
-    { params }: { params: { id: string } },
+    { params }: { params: Promise<{ id: string }> },
 ) {
     try {
         const session = await getServerSession(authOptions);
@@ -17,7 +17,8 @@ export async function PUT(
             );
         }
 
-        const addressId = parseInt(params.id);
+        const { id } = await params;
+        const addressId = parseInt(id);
         const { title, fullName, phone, address, city, district, isDefault } =
             await req.json();
 
@@ -76,7 +77,7 @@ export async function PUT(
 
 export async function DELETE(
     req: NextRequest,
-    { params }: { params: { id: string } },
+    { params }: { params: Promise<{ id: string }> },
 ) {
     try {
         const session = await getServerSession(authOptions);
@@ -88,7 +89,8 @@ export async function DELETE(
             );
         }
 
-        const addressId = parseInt(params.id);
+        const { id } = await params;
+        const addressId = parseInt(id);
 
         // Verify address belongs to current user
         const existingAddress = await prisma.address.findFirst({
