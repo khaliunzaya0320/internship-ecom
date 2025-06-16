@@ -3,9 +3,10 @@ import { NextResponse, NextRequest } from 'next/server';
 
 export async function PUT(
     req: NextRequest,
-    context: { params: { id: string } },
+    context: { params: Promise<{ id: string }> },
 ) {
-    const userId = Number(context.params.id);
+    const { id } = await context.params;
+    const userId = Number(id);
     const { role } = await req.json();
 
     if (!['USER', 'ADMIN'].includes(role)) {
@@ -26,9 +27,10 @@ export async function PUT(
 
 export async function DELETE(
     req: NextRequest,
-    context: { params: { id: string } },
+    context: { params: Promise<{ id: string }> },
 ) {
-    const userId = Number(context.params.id);
+    const { id } = await context.params;
+    const userId = Number(id);
 
     try {
         await prisma.user.delete({
