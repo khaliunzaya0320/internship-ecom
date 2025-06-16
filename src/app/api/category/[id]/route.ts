@@ -5,8 +5,9 @@ interface Params {
     id: string;
 }
 
-export async function GET(req: NextRequest, { params }: { params: Params }) {
-    const categoryId = Number(params.id);
+export async function GET(req: NextRequest, { params }: { params: Promise<Params> }) {
+    const { id } = await params;
+    const categoryId = Number(id);
 
     const products = await prisma.product.findMany({
         where: { categoryId },
@@ -18,9 +19,10 @@ export async function GET(req: NextRequest, { params }: { params: Params }) {
 
 export async function PUT(
     req: Request,
-    { params }: { params: { id: string } },
+    { params }: { params: Promise<{ id: string }> },
 ) {
-    const id = Number(params.id);
+    const { id: paramId } = await params;
+    const id = Number(paramId);
     const { name } = await req.json();
     if (typeof name !== 'string' || !name.trim())
         return NextResponse.json({ error: 'Invalid' }, { status: 400 });
@@ -30,9 +32,10 @@ export async function PUT(
 
 export async function DELETE(
     req: Request,
-    { params }: { params: { id: string } },
+    { params }: { params: Promise<{ id: string }> },
 ) {
-    const id = Number(params.id);
+    const { id: paramId } = await params;
+    const id = Number(paramId);
     await prisma.category.delete({ where: { id } });
     return NextResponse.json({ success: true });
 }
