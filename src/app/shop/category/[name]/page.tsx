@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
 import Category from '@/components/Category';
 import ProductCard from '@/components/ProductCard';
 
@@ -19,14 +20,9 @@ type Product = {
     updatedAt: Date;
 };
 
-interface CategoryPageProps {
-    params: {
-        id: string;
-    };
-}
-
-const CategoryPage = ({ params }: CategoryPageProps) => {
-    const categoryId = params.id;
+const CategoryPage = () => {
+    const params = useParams();
+    const categoryId = params.name as string;
 
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);

@@ -37,10 +37,11 @@ export async function GET(
 
 export async function PUT(
     request: NextRequest,
-    { params }: { params: { id: string } },
+    { params }: { params: Promise<{ id: string }> },
 ) {
     try {
-        const id = parseInt(params.id);
+        const { id: paramId } = await params;
+        const id = parseInt(paramId);
         const data = await request.json();
 
         const product = await prisma.product.update({
@@ -68,10 +69,11 @@ export async function PUT(
 
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { id: string } },
+    { params }: { params: Promise<{ id: string }> },
 ) {
     try {
-        const id = parseInt(params.id);
+        const { id: paramId } = await params;
+        const id = parseInt(paramId);
 
         await prisma.product.delete({
             where: { id },

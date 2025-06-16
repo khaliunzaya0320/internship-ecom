@@ -1,12 +1,15 @@
+'use client';
+
 import Image from 'next/image';
 import Quantity from './Quantity';
 import { Trash2 } from 'lucide-react';
+import { useState } from 'react';
 
 const Cart = () => {
     const name = 'Бүтээгдэхүүн нэр';
     const price = 1000;
     const stock = 5;
-    const quantity = 1;
+    const [quantity, setQuantity] = useState(1);
 
     return (
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 mt-2 border rounded-lg bg-white shadow-sm">
@@ -35,7 +38,11 @@ const Cart = () => {
                         {price} ₮
                     </div>
                 </div>
-                <Quantity />
+                <Quantity 
+                    quantity={quantity}
+                    setQuantity={setQuantity}
+                    stock={stock}
+                />
                 <div className="text-sm font-bold text-rose-600">
                     {price * quantity} ₮
                 </div>
