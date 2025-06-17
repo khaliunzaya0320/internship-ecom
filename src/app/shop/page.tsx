@@ -5,6 +5,7 @@ import Category from '@/components/Category';
 import ProductCard from '@/components/ProductCard';
 import Slider from '@/components/Slider';
 
+
 type Product = {
     id: number;
     name: string;
@@ -20,8 +21,26 @@ type Product = {
     updatedAt: Date;
 };
 
+type CartProduct = Product & { quantity: number };
+
 const HomePage = () => {
     const [products, setProducts] = useState<Product[]>([]);
+    const [cart, setCart] = useState<CartProduct[]>([]);
+
+    const handleAddToCart = (product: Product) => {
+        setCart((prevCart) => {
+            const existing = prevCart.find((item) => item.id === product.id);
+            if (existing) {
+                return prevCart.map((item) =>
+                    item.id === product.id
+                        ? { ...item, quantity: item.quantity + 1 }
+                        : item
+                );
+            } else {
+                return [...prevCart, { ...product, quantity: 1 }];
+            }
+        });
+    };
 
     const fetchFeaturedProducts = async () => {
         const res = await fetch('/api/product');
@@ -48,9 +67,9 @@ const HomePage = () => {
                 </div>
 
                 <h1 className="primary-header pt-8">Онцлох бүтээгдэхүүн</h1>
-                <div className="product-list flex flex-wrap p-2 gap-4 rounded-lg mb-8">
+                <div className="flex flex-row flex-wrap p-2 gap-4 rounded-lg mb-8">
                     {products.map((product) => (
-                        <ProductCard key={product.id} product={product} />
+                        <ProductCard key={product.id} product={product} onAddToCart={handleAddToCart}/>
                     ))}
                 </div>
 

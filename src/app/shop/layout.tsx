@@ -8,10 +8,12 @@ export default function ShopLayout({
 }>) {
     return (
         <div>
-            <div className="">
-                <Header />
-                {children}
-                <Footer />
+            <div className="flex flex-col min-h-screen">
+                <div className='flex-grow'>
+                    <Header />
+                    {children}
+                </div>
+                <Footer />                
             </div>
         </div>
     );

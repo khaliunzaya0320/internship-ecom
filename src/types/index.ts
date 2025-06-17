@@ -23,6 +23,7 @@ export interface Product {
     stock: number;
     imageUrl: string;
     images?: ProductImage[];
+    quantity: number;
     categoryId: number;
     category: Category;
     _count?: {
