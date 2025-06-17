@@ -47,7 +47,7 @@ const Menu = () => {
     }, []);
     return (
         <nav
-            className="flex gap-6 text-sm font-medium items-center relative"
+            className="flex gap-6 text-sm font-medium items-center relative text-gray-200"
             ref={dropdownRef}
         >
             {/* Notification dropdown - зөвхөн нэвтэрсэн хэрэглэгчдэд харуулах */}
@@ -58,7 +58,7 @@ const Menu = () => {
                         className={`navbar-menu flex flex-col items-center ${
                             open
                                 ? 'text-rose-500 font-semibold'
-                                : 'text-gray-600 hover:text-rose-400'
+                                : 'text-gray-200 hover:text-rose-400'
                         }`}
                     >
                         <Bell className="menu-icon" />
@@ -97,7 +97,7 @@ const Menu = () => {
                         className={`navbar-menu flex flex-col items-center ${
                             isActive
                                 ? 'text-rose-500 font-semibold'
-                                : 'text-gray-600 hover:text-rose-400'
+                                : 'text-gray-200 hover:text-rose-400'
                         }`}
                     >
                         {item.icon}
@@ -114,7 +114,7 @@ const Menu = () => {
                         className={`navbar-menu flex flex-col items-center ${
                             accountOpen || pathname.startsWith('/account')
                                 ? 'text-rose-500 font-semibold'
-                                : 'text-gray-600 hover:text-rose-400'
+                                : 'text-gray-200 hover:text-rose-400'
                         }`}
                     >
                         <User className="menu-icon" />
@@ -215,7 +215,7 @@ const Menu = () => {
                     className={`navbar-menu flex flex-col items-center ${
                         pathname === '/auth/login'
                             ? 'text-rose-500 font-semibold'
-                            : 'text-gray-600 hover:text-rose-400'
+                            : 'text-gray-200 hover:text-rose-400'
                     }`}
                 >
                     <User className="menu-icon" />
