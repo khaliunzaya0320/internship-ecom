@@ -2,16 +2,21 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { Bell, Heart, ShoppingCart, User, LogOut, Package } from 'lucide-react';
+import { useNotification } from '@/context/NotificationContext'; 
 
 const Menu = () => {
     const { data: session, status } = useSession();
     const pathname = usePathname();
-    const [open, setOpen] = useState(false);
-    const [accountOpen, setAccountOpen] = useState(false);
-    const dropdownRef = useRef(null);
+    const [open, setOpen] = useState(false); 
+    const [accountOpen, setAccountOpen] = useState(false); 
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    const { notifications } = useNotification(); 
+    const unreadNotificationsCount = notifications.filter(notif => !notif.read).length;
+    const latestNotifications = notifications.slice(0, 3); 
 
     const menuItems = [
         {
@@ -23,6 +28,12 @@ const Menu = () => {
             href: '/shop/cart',
             label: 'Сагс',
             icon: <ShoppingCart className="menu-icon" />,
+        },
+        {
+            href: '/account/wishlist',
+            label: 'Таалагдсан',
+            icon: <Heart className="menu-icon" />,
+            authRequired: true,
         },
     ];
 
@@ -45,6 +56,12 @@ const Menu = () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+
+    const handleSignOut = async () => {
+        setAccountOpen(false);
+        await signOut({ callbackUrl: '/' });
+    };
+
     return (
         <nav
             className="flex gap-6 text-sm font-medium items-center relative text-gray-200"
@@ -62,23 +79,34 @@ const Menu = () => {
                         }`}
                     >
                         <Bell className="menu-icon" />
+                        {unreadNotificationsCount > 0 && (
+                            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                                {unreadNotificationsCount}
+                            </span>
+                        )}
                         <span>Мэдэгдэл</span>
                     </button>
 
                     {open && (
                         <div className="absolute -right-36 mt-4 w-80 shadow-xl border rounded-md z-50 p-4 bg-white font-normal">
-                            <ul className="">
-                                <li className="border-b py-4 px-2 text-sm">
-                                    Захиалга цуцлагдлаа - 2025/6/9 13:35
-                                </li>
-                                <li className="border-b py-2 px-2 text-sm">
-                                    Захиалга цуцлагдлаа - 2025/6/9 13:35
-                                </li>
-                            </ul>
-                            <div className="mt-2 text-right">
+                            <h3 className="font-semibold text-gray-800 mb-2">Шинэ мэдэгдлүүд</h3>
+                            {latestNotifications.length > 0 ? (
+                                <ul className="space-y-2">
+                                    {latestNotifications.map((notif) => (
+                                        <li key={notif.id} className={`border-b border-gray-100 pb-2 ${notif.read ? 'text-gray-500' : 'text-gray-800'}`}>
+                                            <p className="text-sm font-medium">{notif.message}</p>
+                                            <p className="text-xs text-gray-400">{notif.date}</p>
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p className="text-center text-gray-500 text-sm py-4">Шинэ мэдэгдэл байхгүй.</p>
+                            )}
+                            <div className="mt-4 text-right">
                                 <Link
-                                    href="/shop/account/order"
+                                    href="" 
                                     className="text-rose-500 hover:underline font-medium text-sm"
+                                    onClick={() => setOpen(false)} 
                                 >
                                     Бүгдийг харах
                                 </Link>
@@ -87,8 +115,12 @@ const Menu = () => {
                     )}
                 </div>
             )}
+
             {/* Other menu items */}
             {menuItems.map((item, index) => {
+                if (item.authRequired && !session) {
+                    return null;
+                }
                 const isActive = pathname === item.href;
                 return (
                     <Link
@@ -105,6 +137,7 @@ const Menu = () => {
                     </Link>
                 );
             })}{' '}
+
             {/* Account menu - conditional based on authentication */}
             {session ? (
                 <div className="relative">
@@ -194,16 +227,15 @@ const Menu = () => {
                                     </li>
                                 )}
                                 <li>
-                                    <Link
-                                        href="/auth/logout"
-                                        className="block px-4 py-3 text-sm hover:bg-gray-100 text-red-600"
-                                        onClick={() => setAccountOpen(false)}
+                                    <button
+                                        onClick={handleSignOut} 
+                                        className="block w-full text-left px-4 py-3 text-sm hover:bg-gray-100 text-red-600"
                                     >
                                         <div className="flex items-center gap-2">
                                             <LogOut className="w-4 h-4" />
                                             Гарах
                                         </div>
-                                    </Link>
+                                    </button>
                                 </li>
                             </ul>
                         </div>

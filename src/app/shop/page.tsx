@@ -16,6 +16,7 @@ type Product = {
     description: string;
     price: number;
     stock: number;
+    quantity: number;
     imageUrl: string;
     createdAt: Date;
     updatedAt: Date;
@@ -69,7 +70,7 @@ const HomePage = () => {
                 <h1 className="primary-header pt-8">Онцлох бүтээгдэхүүн</h1>
                 <div className="flex flex-row flex-wrap p-2 gap-4 rounded-lg mb-8">
                     {products.map((product) => (
-                        <ProductCard key={product.id} product={product} onAddToCart={handleAddToCart}/>
+                        <ProductCard key={product.id} product={product} />
                     ))}
                 </div>
 

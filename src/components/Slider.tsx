@@ -31,7 +31,7 @@ const Slider = () => {
         if (sliders.length > 1) {
             const interval = setInterval(() => {
                 setCurrent((prev) => (prev + 1) % sliders.length);
-            }, 5000); // Auto-slide every 5 seconds
+            }, 5000); 
 
             return () => clearInterval(interval);
         }
@@ -83,8 +83,8 @@ const Slider = () => {
                             )}
                             {slide.linkUrl && (
                                 <Link href={slide.linkUrl}>
-                                    <button className="rounded-full bg-rose-500 text-white py-3 px-6 hover:bg-rose-600 transition-colors duration-200">
-                                        Худалдан авах
+                                    <button className="rounded-full bg-rose-500 text-white py-2 px-4 hover:bg-rose-600 transition-colors duration-200">
+                                        Дэлгэрэнгүй үзэх
                                     </button>
                                 </Link>
                             )}
