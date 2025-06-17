@@ -1,9 +1,10 @@
 import { Metadata } from 'next';
 import '../styles/globals.css';
 import React from 'react';
-import '../styles/globals.css';
 import SessionProvider from '@/components/SessionProvider';
 import { CartProvider } from '@/context/CartContext';
+import { ToastProvider } from '@/components/ToastProvider';
+import { NotificationProvider } from '@/context/NotificationContext';
 
 
 export const metadata: Metadata = {
@@ -20,9 +21,13 @@ export default function RootLayout({
         <html lang="en">
             <body className="bg-gray-100">
                 <SessionProvider>
-                    <CartProvider>
-                        {children}
-                    </CartProvider>
+                    <ToastProvider>
+                        <NotificationProvider>
+                            <CartProvider>
+                                {children}
+                            </CartProvider>
+                        </NotificationProvider>
+                    </ToastProvider>
                 </SessionProvider>
             </body>
         </html>

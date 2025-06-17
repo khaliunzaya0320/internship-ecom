@@ -1,34 +1,21 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 import { Eye, ShoppingCart, Package } from 'lucide-react';
 import LikeButton from './LikeButton';
 import { useCart } from '@/context/CartContext';
-
+import { toast } from 'react-toastify';
+import { Product } from '@/types'; 
 
 export type ProductCardProps = {
-    product: {
-        id: number;
-        name: string;
-        category: {
-            id: number;
-            name: string;
-        } | null;
-        description: string;
-        price: number;
-        stock: number;
-        imageUrl: string;
-        quantity: number;
-        createdAt: string | Date;
-        updatedAt: string | Date;
-    };
+    product: Product;
     isLiked?: boolean;
-    onLikeToggle?: () => void;
+    onLikeToggle?: (productId: number) => void;
     viewMode?: 'grid' | 'list';
     onQuickView?: (productId: number) => void;
-    onAddToCart?: (product: any) => void;
 };
-
 
 const ProductCard = ({
     product,
@@ -36,10 +23,9 @@ const ProductCard = ({
     onLikeToggle,
     viewMode = 'grid',
     onQuickView,
-    onAddToCart,
 }: ProductCardProps) => {
     const [imageLoading, setImageLoading] = useState(true);
-    const { addToCart, cartProducts } = useCart();
+    const { addToCart } = useCart();
 
 
     if (!product) return null;
@@ -54,6 +40,23 @@ const ProductCard = ({
             onQuickView(product.id);
         }
     };
+
+    const handleAddToCart = () => {
+        addToCart(product);
+        toast.success(`${product.name} сагсанд нэмэгдлээ.`);
+    };
+
+    const handleLikeToggle = () => {
+        if (onLikeToggle) {
+            onLikeToggle(product.id); 
+        }
+        if (isLiked) {
+            toast.info(`${product.name} хүслийн жагсаалтаас хасагдлаа`);
+        } else {
+            toast.success(`${product.name} хүслийн жагсаалтад нэмэгдлээ`);
+        }
+    };
+
 
     if (viewMode === 'list') {
         return (
@@ -95,7 +98,7 @@ const ProductCard = ({
                                     {product.name}
                                 </h3>
                             </Link>
-                            <button onClick={onLikeToggle} className="p-1">
+                            <button onClick={handleLikeToggle} className="p-1">
                                 <LikeButton isLiked={isLiked} />
                             </button>
                         </div>
@@ -122,15 +125,15 @@ const ProductCard = ({
                                             isOutOfStock
                                                 ? 'text-red-600'
                                                 : isLowStock
-                                                  ? 'text-orange-600'
-                                                  : 'text-green-600'
+                                                ? 'text-orange-600'
+                                                : 'text-green-600'
                                         }`}
                                     >
                                         {isOutOfStock
                                             ? 'Out of Stock'
                                             : isLowStock
-                                              ? `Only ${product.stock} left`
-                                              : `Үлдэгдэл: ${product.stock}`}
+                                            ? `Only ${product.stock} left`
+                                            : `Үлдэгдэл: ${product.stock}`}
                                     </span>
                                 </div>
                             </div>
@@ -144,14 +147,14 @@ const ProductCard = ({
                                     <Eye className="h-4 w-4" />
                                 </button>
                                 <button
-                                    onClick={() => addToCart(product)}
+                                    onClick={handleAddToCart}
                                     disabled={isOutOfStock}
                                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                                         isOutOfStock
                                         ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
                                         : 'bg-rose-500 text-white hover:bg-rose-600'
                                     }`}
-                                    >
+                                >
                                     <ShoppingCart className="h-4 w-4 inline mr-2" />
                                     {isOutOfStock ? 'Unavailable' : 'Add to Cart'}
                                 </button>
@@ -204,9 +207,8 @@ const ProductCard = ({
                     <Eye className="h-4 w-4 text-gray-700" />
                 </button>
 
-                {/* Like Button */}
                 <button
-                    onClick={onLikeToggle}
+                    onClick={handleLikeToggle}
                     className="absolute top-2 left-2 p-2 bg-white/80 hover:bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                 >
                     <LikeButton isLiked={isLiked} />
@@ -233,15 +235,15 @@ const ProductCard = ({
                             isOutOfStock
                                 ? 'text-red-600'
                                 : isLowStock
-                                  ? 'text-orange-600'
-                                  : 'text-green-600'
+                                ? 'text-orange-600'
+                                : 'text-green-600'
                         }`}
                     >
                         {isOutOfStock
                             ? 'Out of Stock'
                             : isLowStock
-                              ? `Only ${product.stock} left`
-                              : `Үлдэгдэл: ${product.stock}`}
+                            ? `Only ${product.stock} left`
+                            : `Үлдэгдэл: ${product.stock}`}
                     </span>
                 </div>
 
@@ -252,14 +254,14 @@ const ProductCard = ({
                 </div>
 
                 <button
-                    onClick={() => addToCart(product)}
+                    onClick={handleAddToCart}
                     disabled={isOutOfStock}
                     className={`w-full py-2 text-sm rounded-lg font-medium transition-colors ${
                         isOutOfStock
                         ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
                         : 'bg-rose-500 text-white hover:bg-rose-600'
                     }`}
-                    >
+                >
                     {isOutOfStock ? 'Unavailable' : 'Сагсанд нэмэх'}
                 </button>
 

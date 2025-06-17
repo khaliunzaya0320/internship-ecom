@@ -30,7 +30,7 @@ const CartPage = () => {
             </div>
 
             {/* Payment */}
-            <div className="lg:w-2/5 w-full">
+            <div className="lg:w-2/5 w-full h-96">
                 <h2 className="primary-header mb-6">Төлбөрийн мэдээлэл</h2>
                 <div className="flex flex-col bg-white rounded-md p-8 shadow-sm mt-2">
                     <p className="text-lg font-medium mb-4">

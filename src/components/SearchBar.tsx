@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 const SearchBar = () => {
     return (
-        <form className="flex justify-between gap-4 bg-gray-100 p-2 rounded-2xl flex-1 max-w-sm">
+        <form className="flex justify-between ml-10 gap-4 bg-gray-100 p-1 rounded-2xl flex-1 max-w-sm">
             <input
                 type="text"
                 placeholder="Хайх"

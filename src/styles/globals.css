@@ -2,10 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-}
+@import 'react-toastify/dist/ReactToastify.css';
+
 
 @layer components {
+
     /* Form styles */
     .form-input {
         @apply flex p-2 border rounded-md items-center w-full;
@@ -18,17 +19,18 @@
         @apply text-blue-600 underline hover:text-blue-800;
     }
 
-    .next-auth-button {
-        @apply border rounded-lg p-2 mt-2 w-full text-slate-900;
-    }
 
     /* Header text */
     .primary-header {
-        @apply text-2xl font-semibold m-2 mb-4;
+        @apply text-lg font-semibold m-2 mb-3;
+        @apply sm:text-xl sm:m-3 sm:mb-4;
+        @apply lg:text-2xl lg:m-4 lg:mb-5; 
     }
 
     .secondary-header {
-        @apply text-lg font-medium;
+        @apply text-base font-medium; 
+        @apply sm:text-lg;
+        @apply lg:text-xl; 
     }
 
     .side-menu-button {
@@ -78,6 +80,50 @@
     .admin-table {
         @apply min-w-full table-auto bg-white border;
     }
+
+    
+    /* Toast styles */
+
+    .Toastify__toast-container {
+        padding: 1rem;
+        z-index: 9999;
+    }
+
+    .Toastify__toast {
+        border-radius: 8px !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+        padding: 12px 16px !important;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+        color: black !important;
+    }
+
+    .Toastify__toast--success {
+        background-color: pink !important;
+        --toastify-color-progress-success: pink; 
+        --toastify-color-light: pink; 
+        --toastify-text-color-light: black; 
+
+    }
+
+    .Toastify__toast--error {
+        --toastify-color-progress-error: #c62828;
+        --toastify-color-error: #c62828;
+        background-color: #c62828 !important;
+    }
+
+    .Toastify__toast--info {
+        --toastify-color-progress-info: #0288d1;
+        --toastify-color-info: #0288d1;
+        background-color: #0288d1 !important;
+    }
+
+    .Toastify__toast--warning {
+        --toastify-color-progress-warning: #fbc02d;
+        --toastify-color-warning: #fbc02d;
+        background-color: #fbc02d !important;
+        color: #333 !important;
+    }
+
 }
 
 @layer utilities {
@@ -101,4 +147,5 @@
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
+
 }
