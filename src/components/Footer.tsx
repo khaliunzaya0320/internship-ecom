@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 const Footer = () => {
     return (
-        <div className="bg-white h-48 flex justify-between p-8">
+        <div className="bg-white h-48 flex justify-between p-8 ">
             <Link href="/" className="text-xl font-bold text-gray-800">
                 E-Commerce
             </Link>

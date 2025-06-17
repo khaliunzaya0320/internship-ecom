@@ -3,6 +3,8 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { Eye, ShoppingCart, Package } from 'lucide-react';
 import LikeButton from './LikeButton';
+import { useCart } from '@/context/CartContext';
+
 
 export type ProductCardProps = {
     product: {
@@ -16,6 +18,7 @@ export type ProductCardProps = {
         price: number;
         stock: number;
         imageUrl: string;
+        quantity: number;
         createdAt: string | Date;
         updatedAt: string | Date;
     };
@@ -23,7 +26,9 @@ export type ProductCardProps = {
     onLikeToggle?: () => void;
     viewMode?: 'grid' | 'list';
     onQuickView?: (productId: number) => void;
+    onAddToCart?: (product: any) => void;
 };
+
 
 const ProductCard = ({
     product,
@@ -31,8 +36,11 @@ const ProductCard = ({
     onLikeToggle,
     viewMode = 'grid',
     onQuickView,
+    onAddToCart,
 }: ProductCardProps) => {
     const [imageLoading, setImageLoading] = useState(true);
+    const { addToCart, cartProducts } = useCart();
+
 
     if (!product) return null;
 
@@ -49,7 +57,7 @@ const ProductCard = ({
 
     if (viewMode === 'list') {
         return (
-            <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 p-6">
+            <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 p-6 min-w-64">
                 <div className="flex gap-6">
                     {/* Image */}
                     <Link
@@ -122,7 +130,7 @@ const ProductCard = ({
                                             ? 'Out of Stock'
                                             : isLowStock
                                               ? `Only ${product.stock} left`
-                                              : `${product.stock} in stock`}
+                                              : `Үлдэгдэл: ${product.stock}`}
                                     </span>
                                 </div>
                             </div>
@@ -136,17 +144,16 @@ const ProductCard = ({
                                     <Eye className="h-4 w-4" />
                                 </button>
                                 <button
+                                    onClick={() => addToCart(product)}
                                     disabled={isOutOfStock}
                                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                                         isOutOfStock
-                                            ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                                            : 'bg-rose-500 text-white hover:bg-rose-600'
+                                        ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                                        : 'bg-rose-500 text-white hover:bg-rose-600'
                                     }`}
-                                >
+                                    >
                                     <ShoppingCart className="h-4 w-4 inline mr-2" />
-                                    {isOutOfStock
-                                        ? 'Unavailable'
-                                        : 'Add to Cart'}
+                                    {isOutOfStock ? 'Unavailable' : 'Add to Cart'}
                                 </button>
                             </div>
                         </div>
@@ -158,7 +165,7 @@ const ProductCard = ({
 
     // Grid view (default)
     return (
-        <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden group">
+        <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden group min-w-64">
             <div className="relative">
                 {/* Image */}
                 <Link
@@ -234,7 +241,7 @@ const ProductCard = ({
                             ? 'Out of Stock'
                             : isLowStock
                               ? `Only ${product.stock} left`
-                              : `${product.stock} in stock`}
+                              : `Үлдэгдэл: ${product.stock}`}
                     </span>
                 </div>
 
@@ -245,15 +252,17 @@ const ProductCard = ({
                 </div>
 
                 <button
+                    onClick={() => addToCart(product)}
                     disabled={isOutOfStock}
                     className={`w-full py-2 text-sm rounded-lg font-medium transition-colors ${
                         isOutOfStock
-                            ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                            : 'bg-rose-500 text-white hover:bg-rose-600'
+                        ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                        : 'bg-rose-500 text-white hover:bg-rose-600'
                     }`}
-                >
-                    {isOutOfStock ? 'Unavailable' : 'Add to Cart'}
+                    >
+                    {isOutOfStock ? 'Unavailable' : 'Сагсанд нэмэх'}
                 </button>
+
             </div>
         </div>
     );

@@ -5,6 +5,8 @@ import { useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { Product } from '@/types';
+import { useCart } from '@/context/CartContext';
+
 
 const ProductDetail = () => {
     const params = useParams();
@@ -14,6 +16,10 @@ const ProductDetail = () => {
     const [quantity, setQuantity] = useState(1);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const { addToCart } = useCart();
+    
+
+
 
     useEffect(() => {
         if (id) {
@@ -106,11 +112,13 @@ const ProductDetail = () => {
                         stock={product.stock}
                     />
                     <button
+                        onClick={() => addToCart(product)}
                         className="default-button"
                         disabled={product.stock === 0}
                     >
                         {product.stock === 0 ? 'Дууссан' : 'Сагсанд нэмэх'}
                     </button>
+
                 </div>
             </div>
         </div>
