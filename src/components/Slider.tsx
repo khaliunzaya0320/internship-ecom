@@ -68,12 +68,12 @@ const Slider = () => {
             >
                 {sliders.map((slide) => (
                     <div
-                        className="bg-gradient-to-r from-blue-50 to-yellow-50 w-screen h-full flex flex-col gap-16 xl:flex-row"
+                        className="bg-gradient-to-r from-blue-50 to-yellow-50 w-screen h-full flex flex-row"
                         key={slide.id}
                     >
-                        {/* text left */}
-                        <div className="w-1/2 xl:h-full flex flex-col items-center justify-center gap-8 2xl:gap-12 text-center px-8">
-                            <h1 className="text-5xl font-semibold text-gray-800">
+                        {/* TEXT SECTION (Left) */}
+                        <div className="w-1/2 h-full flex flex-col items-center justify-center gap-8 2xl:gap-12 text-center p-8">
+                            <h1 className="text-4xl font-semibold text-gray-800 ">
                                 {slide.title}
                             </h1>
                             {slide.description && (
@@ -90,7 +90,7 @@ const Slider = () => {
                             )}
                         </div>
 
-                        {/* img right */}
+                        {/* IMAGE SECTION (Right) */}
                         <div className="w-1/2 h-full relative flex items-center justify-center">
                             <Image
                                 src={slide.imageUrl}

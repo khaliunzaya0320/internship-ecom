@@ -1,25 +1,28 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { X, ShoppingCart, Heart, Package, Star } from 'lucide-react';
+import { X, ShoppingCart, Heart, Package, Star } from 'lucide-react'; 
 import Image from 'next/image';
-import { Product } from '@/types';
+import { Product } from '@/types'; 
+import Quantity from './Quantity'; 
 
 interface QuickViewModalProps {
     productId: number | null;
     isOpen: boolean;
     onClose: () => void;
+    onAddToCart?: (product: Product, quantity: number) => void;
 }
 
 const QuickViewModal = ({
     productId,
     isOpen,
     onClose,
+    onAddToCart, 
 }: QuickViewModalProps) => {
     const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState(false);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-    const [quantity, setQuantity] = useState(1);
+    const [quantity, setQuantity] = useState(1); 
 
     useEffect(() => {
         if (isOpen && productId) {
@@ -34,21 +37,40 @@ const QuickViewModal = ({
         try {
             const response = await fetch(`/api/product/${productId}`);
             if (response.ok) {
-                const data = await response.json();
-                setProduct(data);
+                const data: Product = await response.json();
+                const formattedProduct = {
+                    ...data,
+                    createdAt: new Date(data.createdAt),
+                    updatedAt: new Date(data.updatedAt),
+                };
+                setProduct(formattedProduct);
                 setSelectedImageIndex(0);
-                setQuantity(1);
+                setQuantity(1); 
+            } else {
+                console.error('Бүтээгдэхүүн татахад алдаа гарлаа:', response.status, response.statusText);
+                setProduct(null); 
             }
         } catch (error) {
-            console.error('Error fetching product:', error);
+            console.error('Бүтээгдэхүүн татахад сүлжээний алдаа гарлаа:', error);
+            setProduct(null); 
         } finally {
             setLoading(false);
         }
     };
 
     const handleClose = () => {
-        setProduct(null);
+        setProduct(null); 
+        setQuantity(1); 
         onClose();
+    };
+
+    const handleAddToCartClick = () => {
+        if (product && quantity > 0) {
+            if (onAddToCart) {
+                onAddToCart(product, quantity); 
+            }
+            console.log(`Сагсанд нэмлээ: ${quantity} x ${product.name}`);
+        }
     };
 
     if (!isOpen) return null;
@@ -58,17 +80,17 @@ const QuickViewModal = ({
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-xl">
                 {/* Header */}
                 <div className="flex justify-between items-center p-6 border-b border-gray-200">
                     <h2 className="text-xl font-semibold text-gray-800">
-                        Quick View
+                        Quick view
                     </h2>
                     <button
                         onClick={handleClose}
                         className="p-2 hover:bg-gray-100 rounded-full transition-colors"
                     >
-                        <X className="h-5 w-5" />
+                        <X className="h-5 w-5 text-gray-600" />
                     </button>
                 </div>
 
@@ -85,53 +107,47 @@ const QuickViewModal = ({
                                 <div className="relative h-96 bg-gray-100 rounded-lg overflow-hidden">
                                     <Image
                                         src={
-                                            product.images?.[selectedImageIndex]
-                                                ?.imageUrl || product.imageUrl
+                                            product.images?.[selectedImageIndex]?.imageUrl || product.imageUrl
                                         }
                                         alt={product.name}
                                         fill
                                         className="object-cover"
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" 
                                     />
                                     {isOutOfStock && (
                                         <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                                             <span className="text-white text-lg font-medium">
-                                                Out of Stock
+                                                Бараа дууссан
                                             </span>
                                         </div>
                                     )}
                                 </div>
 
                                 {/* Thumbnail Images */}
-                                {product.images &&
-                                    product.images.length > 1 && (
-                                        <div className="flex gap-2 overflow-x-auto">
-                                            {product.images.map(
-                                                (image, index) => (
-                                                    <button
-                                                        key={image.id}
-                                                        onClick={() =>
-                                                            setSelectedImageIndex(
-                                                                index,
-                                                            )
-                                                        }
-                                                        className={`relative w-16 h-16 bg-gray-100 rounded-md overflow-hidden flex-shrink-0 ${
-                                                            selectedImageIndex ===
-                                                            index
-                                                                ? 'ring-2 ring-blue-500'
-                                                                : ''
-                                                        }`}
-                                                    >
-                                                        <Image
-                                                            src={image.imageUrl}
-                                                            alt={`${product.name} ${index + 1}`}
-                                                            fill
-                                                            className="object-cover"
-                                                        />
-                                                    </button>
-                                                ),
-                                            )}
-                                        </div>
-                                    )}
+                                {product.images && product.images.length > 0 && ( 
+                                    <div className="flex gap-2 overflow-x-auto">
+                                        {product.images.map(
+                                            (image: { id: number; imageUrl: string }, index: number) => (
+                                                <button
+                                                    key={image.id || index} 
+                                                    onClick={() => setSelectedImageIndex(index)}
+                                                    className={`relative w-16 h-16 bg-gray-100 rounded-md overflow-hidden flex-shrink-0 border-2 ${
+                                                        selectedImageIndex === index
+                                                            ? 'border-blue-500'
+                                                            : 'border-transparent hover:border-gray-300'
+                                                    } transition-colors`}
+                                                >
+                                                    <Image
+                                                        src={image.imageUrl}
+                                                        alt={`${product.name} ${index + 1}`}
+                                                        fill
+                                                        className="object-cover"
+                                                    />
+                                                </button>
+                                            )
+                                        )}
+                                    </div>
+                                )}
                             </div>
 
                             {/* Product Info */}
@@ -141,39 +157,37 @@ const QuickViewModal = ({
                                         {product.name}
                                     </h1>
                                     <p className="text-lg text-gray-600">
-                                        {product.category?.name ||
-                                            'Uncategorized'}
+                                        {product.category?.name || 'Ангилалгүй'}
                                     </p>
+                                    {/* Stock Status */}
+                                    <div className="flex items-center gap-2 mt-2">
+                                        <Package className="h-5 w-5 text-gray-400" />
+                                        <span
+                                            className={`font-medium ${
+                                                isOutOfStock
+                                                    ? 'text-red-600'
+                                                    : isLowStock
+                                                    ? 'text-orange-600'
+                                                    : 'text-green-600'
+                                            }`}
+                                        >
+                                            {isOutOfStock
+                                                ? 'Бараа дууссан'
+                                                : isLowStock
+                                                ? `Ердөө ${product.stock} ширхэг үлдсэн`
+                                                : `${product.stock} ширхэг байгаа`}
+                                        </span>
+                                    </div>
                                 </div>
 
                                 <div className="text-3xl font-bold text-gray-900">
                                     {product.price.toLocaleString()}₮
                                 </div>
 
-                                {/* Stock Status */}
-                                <div className="flex items-center gap-2">
-                                    <Package className="h-5 w-5 text-gray-400" />
-                                    <span
-                                        className={`font-medium ${
-                                            isOutOfStock
-                                                ? 'text-red-600'
-                                                : isLowStock
-                                                  ? 'text-orange-600'
-                                                  : 'text-green-600'
-                                        }`}
-                                    >
-                                        {isOutOfStock
-                                            ? 'Out of Stock'
-                                            : isLowStock
-                                              ? `Only ${product.stock} left in stock`
-                                              : `${product.stock} in stock`}
-                                    </span>
-                                </div>
-
                                 {/* Description */}
                                 <div>
                                     <h3 className="font-medium text-gray-900 mb-2">
-                                        Description
+                                        Тайлбар
                                     </h3>
                                     <p className="text-gray-600 leading-relaxed">
                                         {product.description}
@@ -181,52 +195,30 @@ const QuickViewModal = ({
                                 </div>
 
                                 {/* Quantity and Add to Cart */}
-                                {!isOutOfStock && (
+                                {!isOutOfStock && product && ( 
                                     <div className="space-y-4">
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                                                Quantity
+                                                Тоо ширхэг
                                             </label>
-                                            <div className="flex items-center gap-3">
-                                                <button
-                                                    onClick={() =>
-                                                        setQuantity(
-                                                            Math.max(
-                                                                1,
-                                                                quantity - 1,
-                                                            ),
-                                                        )
-                                                    }
-                                                    className="p-2 border border-gray-300 rounded-md hover:bg-gray-50"
-                                                >
-                                                    -
-                                                </button>
-                                                <span className="px-4 py-2 border border-gray-300 rounded-md min-w-[60px] text-center">
-                                                    {quantity}
-                                                </span>
-                                                <button
-                                                    onClick={() =>
-                                                        setQuantity(
-                                                            Math.min(
-                                                                product.stock,
-                                                                quantity + 1,
-                                                            ),
-                                                        )
-                                                    }
-                                                    className="p-2 border border-gray-300 rounded-md hover:bg-gray-50"
-                                                >
-                                                    +
-                                                </button>
-                                            </div>
+                                            <Quantity
+                                                quantity={quantity}
+                                                setQuantity={setQuantity}
+                                                stock={product.stock} 
+                                            />
                                         </div>
 
                                         <div className="flex gap-3">
-                                            <button className="flex-1 bg-rose-500 text-white py-3 px-6 rounded-lg hover:bg-rose-600 transition-colors flex items-center justify-center gap-2">
+                                            <button
+                                                onClick={handleAddToCartClick} 
+                                                className="flex-1 bg-rose-500 text-white py-3 px-6 rounded-lg hover:bg-rose-600 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                disabled={quantity === 0 || isOutOfStock} 
+                                            >
                                                 <ShoppingCart className="h-5 w-5" />
-                                                Add to Cart
+                                                Сагсанд нэмэх
                                             </button>
                                             <button className="p-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                                                <Heart className="h-5 w-5" />
+                                                <Heart className="h-5 w-5 text-gray-600" />
                                             </button>
                                         </div>
                                     </div>
@@ -239,14 +231,14 @@ const QuickViewModal = ({
                                         onClick={handleClose}
                                         className="text-blue-600 hover:text-blue-800 font-medium"
                                     >
-                                        View Full Details →
+                                        Дэлгэрэнгүй харах →
                                     </a>
                                 </div>
                             </div>
                         </div>
                     ) : (
                         <div className="text-center py-12">
-                            <p className="text-gray-600">Product not found</p>
+                            <p className="text-gray-600">Бүтээгдэхүүн олдсонгүй.</p>
                         </div>
                     )}
                 </div>

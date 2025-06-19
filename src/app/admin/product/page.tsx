@@ -262,6 +262,7 @@ const AdminProductPage = () => {
                     <table className="min-w-full divide-y divide-gray-200">
                         <thead className="bg-gray-50">
                             <tr>
+
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Бүтээгдэхүүн
                                 </th>
@@ -280,7 +281,7 @@ const AdminProductPage = () => {
                                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Үйлдэл
                                 </th>
-                            </tr>{' '}
+                            </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
                             {currentProducts.map((product) => (
@@ -311,7 +312,7 @@ const AdminProductPage = () => {
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        ₮{product.price.toLocaleString()}
+                                        {product.price.toLocaleString()}₮
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <span
@@ -385,37 +386,31 @@ const AdminProductPage = () => {
                                 {Array.from(
                                     { length: Math.min(5, totalPages) },
                                     (_, i) => {
-                                        let page;
+                                        let pageNum; 
                                         if (totalPages <= 5) {
-                                            page = i + 1;
+                                            pageNum = i + 1;
                                         } else if (currentPage <= 3) {
-                                            page = i + 1;
-                                        } else if (
-                                            currentPage >=
-                                            totalPages - 2
-                                        ) {
-                                            page = totalPages - 4 + i;
+                                            pageNum = i + 1;
+                                        } else if (currentPage >= totalPages - 2) {
+                                            pageNum = totalPages - 4 + i;
                                         } else {
-                                            page = currentPage - 2 + i;
+                                            pageNum = currentPage - 2 + i;
                                         }
-
-                                        return (
-                                            <button
-                                                key={page}
-                                                onClick={() =>
-                                                    setCurrentPage(page)
-                                                }
-                                                className={`px-3 py-1 text-sm rounded ${
-                                                    currentPage === page
-                                                        ? 'bg-blue-600 text-white'
-                                                        : 'text-gray-700 hover:bg-gray-100'
-                                                }`}
-                                            >
-                                                {page}
-                                            </button>
-                                        );
-                                    },
-                                )}
+                                        return pageNum; 
+                                    }
+                                ).map((page) => ( 
+                                    <button
+                                        key={page} 
+                                        onClick={() => setCurrentPage(page)}
+                                        className={`px-3 py-1 text-sm rounded ${
+                                            currentPage === page
+                                                ? 'bg-blue-600 text-white'
+                                                : 'text-gray-700 hover:bg-gray-100'
+                                        }`}
+                                    >
+                                        {page}
+                                    </button>
+                                ))}
                             </div>
 
                             <button

@@ -98,7 +98,6 @@ const Profile = () => {
             if (res.ok) {
                 setSuccess('Мэдээлэл амжилттай шинэчлэгдлээ');
                 setProfileData(data);
-                // Update session if email changed
                 if (session?.user?.email !== email) {
                     await update({ email });
                 }
@@ -237,12 +236,12 @@ const Profile = () => {
     return (
         <div>
             {/* Tab selection */}
-            <div className="flex">
+            <div className="flex gap-2">
                 {tabs.map((tab, index) => (
                     <button
                         key={index}
                         onClick={() => setActiveTab(index)}
-                        className={`h-20 w-44 mr-6 p-4 flex items-center bg-white rounded shadow-sm border ${
+                        className={`h-20 w-44 p-2 flex items-center bg-white rounded shadow-sm border ${
                             activeTab === index
                                 ? 'border-rose-500 text-rose-500'
                                 : 'border-transparent text-gray-500 hover:text-rose-400'

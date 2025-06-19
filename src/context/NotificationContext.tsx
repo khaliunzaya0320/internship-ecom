@@ -1,73 +1,78 @@
-'use client';
+'use client'; 
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, {
+    createContext,
+    useContext,
+    useState,
+    useCallback,
+    ReactNode,
+} from 'react';
 
 export type NotificationItem = {
-    id: string; 
+    id: string;
     message: string;
-    date: string;
     type: 'success' | 'error' | 'info' | 'warning';
-    read: boolean; 
+    date: string; 
+    read: boolean;
 };
 
-type NotificationContextType = {
+interface NotificationContextType {
     notifications: NotificationItem[];
-    addNotification: (message: string, type: NotificationItem['type']) => void;
+    addNotification: (message: string, type?: NotificationItem['type']) => void;
     markAsRead: (id: string) => void;
     clearNotifications: () => void;
-};
+    unreadNotificationsCount: number; 
+}
 
-const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
+const NotificationContext = createContext<NotificationContextType | null>(null);
 
-export const NotificationProvider = ({ children }: { children: ReactNode }) => {
+export function NotificationProvider({ children }: { children: ReactNode }) {
     const [notifications, setNotifications] = useState<NotificationItem[]>([]);
 
-    useEffect(() => {
-        const storedNotifications = localStorage.getItem('notifications');
-        if (storedNotifications) {
-            setNotifications(JSON.parse(storedNotifications));
-        }
-    }, []);
-
-    useEffect(() => {
-        localStorage.setItem('notifications', JSON.stringify(notifications));
-    }, [notifications]);
-
-    const addNotification = (message: string, type: NotificationItem['type'] = 'info') => {
+    const addNotification = useCallback((message: string, type: NotificationItem['type'] = 'info') => {
         const newNotification: NotificationItem = {
-            id: Date.now().toString() + Math.random().toString(36).substring(2, 9), 
+            id: Math.random().toString(36).substr(2, 9), 
             message,
-            date: new Date().toLocaleString(),
             type,
+            date: new Date().toLocaleString(), 
             read: false,
         };
-        setNotifications((prev) => [newNotification, ...prev]); 
-    };
+        setNotifications((prevNotifications) => [...prevNotifications, newNotification]);
+    }, []);
 
-    const markAsRead = (id: string) => {
-        setNotifications((prev) =>
-            prev.map((notif) => (notif.id === id ? { ...notif, read: true } : notif))
+    const markAsRead = useCallback((id: string) => {
+        setNotifications((prevNotifications) =>
+            prevNotifications.map((notif) =>
+                notif.id === id ? { ...notif, read: true } : notif
+            )
         );
-    };
+    }, []);
 
-    const clearNotifications = () => {
+    const clearNotifications = useCallback(() => {
         setNotifications([]);
-        localStorage.removeItem('notifications');
+    }, []);
+
+    const unreadNotificationsCount = notifications.filter(notif => !notif.read).length;
+
+    const contextValue = {
+        notifications,
+        addNotification,
+        markAsRead,
+        clearNotifications,
+        unreadNotificationsCount,
     };
 
     return (
-        <NotificationContext.Provider
-            value={{ notifications, addNotification, markAsRead, clearNotifications }}
-        >
+        <NotificationContext.Provider value={contextValue}>
             {children}
         </NotificationContext.Provider>
     );
-};
+}
 
-export const useNotification = (): NotificationContextType => {
+export function useNotification() {
     const context = useContext(NotificationContext);
     if (!context) {
         throw new Error('useNotification must be used within a NotificationProvider');
     }
     return context;
-};
+}

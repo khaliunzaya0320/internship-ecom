@@ -27,7 +27,7 @@ const MobileMenu = () => {
         },
         {
             href: '/shop/liked-products',
-            label: 'Таалагдсан',
+            label: 'Хадгалсан',
             icon: <Heart className="w-5 h-5" />,
             authRequired: true,
         },

@@ -94,7 +94,7 @@ const AdminOrderPage = () => {
             });
 
             if (response.ok) {
-                fetchOrders(); // Жагсаалт дахин ачаалах
+                fetchOrders(); 
             } else {
                 alert('Захиалгын төлөв өөрчлөхөд алдаа гарлаа');
             }
@@ -288,7 +288,7 @@ const AdminOrderPage = () => {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="text-sm font-semibold text-gray-900">
-                                            ₮{order.total.toLocaleString()}
+                                            {order.total.toLocaleString()}₮
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
@@ -335,7 +335,7 @@ const AdminOrderPage = () => {
                                         </a>
                                     </td>
                                 </tr>
-                            ))}{' '}
+                            ))}
                         </tbody>
                     </table>
                 </div>

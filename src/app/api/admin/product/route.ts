@@ -1,9 +1,11 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import path from 'path';
 
-// GET: Бүтээгдэхүүний жагсаалт авах
+const uploadDir = path.join(process.cwd(), 'public/uploads');
+
 export async function GET() {
     try {
         const session = await getServerSession(authOptions);
@@ -34,7 +36,7 @@ export async function GET() {
 
         return NextResponse.json(products);
     } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error('Error fetching products:', error); 
         return NextResponse.json(
             { error: 'Failed to fetch products' },
             { status: 500 },
@@ -42,66 +44,47 @@ export async function GET() {
     }
 }
 
-// POST: Шинэ бүтээгдэхүүн нэмэх
-export async function POST(request: Request) {
+
+export async function POST(request: NextRequest) {
     try {
         const session = await getServerSession(authOptions);
-
         if (!session || session.user?.role !== 'ADMIN') {
-            return NextResponse.json(
-                { error: 'Unauthorized' },
-                { status: 401 },
-            );
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
         const body = await request.json();
         const { name, description, price, stock, categoryId, images } = body;
 
-        if (!name || !price || !categoryId) {
-            return NextResponse.json(
-                { error: 'Name, price, and category are required' },
-                { status: 400 },
-            );
+        if (!name || !price || !stock || !categoryId || !images || !Array.isArray(images) || images.length === 0) {
+            return NextResponse.json({ error: 'Бүх шаардлагатай талбарыг бөглөнө үү, мөн дор хаяж нэг зураг оруулна уу.' }, { status: 400 });
         }
 
-        // Create product with primary image URL for backward compatibility
-        const primaryImageUrl = images && images.length > 0 ? images[0] : '';
-
-        const product = await prisma.product.create({
+        const newProduct = await prisma.product.create({
             data: {
                 name,
-                description: description || '',
-                price: parseFloat(price),
-                stock: parseInt(stock) || 0,
-                imageUrl: primaryImageUrl,
-                categoryId: parseInt(categoryId),
-                // Create product images if provided
-                images:
-                    images && images.length > 0
-                        ? {
-                              create: images.map(
-                                  (url: string, index: number) => ({
-                                      imageUrl: url,
-                                      isPrimary: index === 0,
-                                  }),
-                              ),
-                          }
-                        : undefined,
+                description,
+                price: parseFloat(price), 
+                stock: parseInt(stock),   
+                categoryId: parseInt(categoryId), 
+                images: {
+                    create: images.map((imageUrl: string) => ({
+                        imageUrl: imageUrl,
+                    })),
+                },
+                imageUrl: images[0], 
             },
             include: {
+                images: true, 
                 category: true,
-                images: {
-                    orderBy: { createdAt: 'asc' },
-                },
-            },
+            }
         });
 
-        return NextResponse.json(product, { status: 201 });
+        return NextResponse.json(newProduct, { status: 201 }); 
     } catch (error) {
-        console.error('Error creating product:', error);
+        console.error('Бүтээгдэхүүн нэмэхэд алдаа гарлаа:', error);
         return NextResponse.json(
-            { error: 'Failed to create product' },
-            { status: 500 },
+            { error: 'Бүтээгдэхүүн нэмэхэд алдаа гарлаа', details: error instanceof Error ? error.message : 'алдаа' },
+            { status: 500 }
         );
     }
 }
