@@ -12,7 +12,7 @@ import {
     ChevronRight,
 } from 'lucide-react';
 import ImageUpload from '@/components/ImageUpload';
-import { Product, ProductImage, Category } from '@/types';
+import { Product, Category } from '@/types'; 
 
 const AdminProductPage = () => {
     const [products, setProducts] = useState<Product[]>([]);
@@ -36,6 +36,7 @@ const AdminProductPage = () => {
         categoryId: '',
     });
     const [productImages, setProductImages] = useState<string[]>([]);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         fetchProducts();
@@ -48,9 +49,13 @@ const AdminProductPage = () => {
             if (response.ok) {
                 const data = await response.json();
                 setProducts(data);
+            } else {
+                console.error('Failed to fetch products:', response.statusText);
+                setError('Бүтээгдэхүүн татахад алдаа гарлаа.');
             }
         } catch (error) {
             console.error('Error fetching products:', error);
+            setError('Бүтээгдэхүүн татахад сүлжээний алдаа гарлаа.');
         } finally {
             setLoading(false);
         }
@@ -62,63 +67,90 @@ const AdminProductPage = () => {
             if (response.ok) {
                 const data = await response.json();
                 setCategories(data);
+            } else {
+                console.error('Failed to fetch categories:', response.statusText);
+                setError('Ангилал татахад алдаа гарлаа.');
             }
         } catch (error) {
             console.error('Error fetching categories:', error);
+            setError('Ангилал татахад сүлжээний алдаа гарлаа.');
         }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setLoading(true);
+        setError(null);
 
-        if (
-            !formData.name ||
-            !formData.categoryId ||
-            !formData.price ||
-            !formData.stock ||
-            productImages.length === 0
-        ) {
-            alert('Бүх талбарыг бөглөж, дор хаяж нэг зураг оруулна уу');
+        const parsedPrice = parseFloat(formData.price);
+        const parsedStock = parseInt(formData.stock, 10);
+
+        if (isNaN(parsedPrice) || parsedPrice < 0) {
+            setError('Үнэ буруу байна. Эерэг тоо оруулна уу.');
+            setLoading(false);
+            return;
+        }
+        if (isNaN(parsedStock) || parsedStock < 0) {
+            setError('Нөөц буруу байна. Эерэг бүхэл тоо оруулна уу.');
+            setLoading(false);
+            return;
+        }
+        if (!formData.name || !formData.description || !formData.categoryId || productImages.length === 0) {
+            setError('Бүх талбарыг бөглөж, зураг оруулна уу.');
+            setLoading(false);
             return;
         }
 
         try {
-            const url = editing
-                ? `/api/admin/product/${editing.id}`
-                : '/api/admin/product';
-            const method = editing ? 'PUT' : 'POST';
+            const imagesToSubmit = productImages; 
 
-            const submitData = {
-                ...formData,
-                price: parseFloat(formData.price),
-                stock: parseInt(formData.stock),
-                categoryId: parseInt(formData.categoryId),
-                images: productImages,
+            const productData = {
+                name: formData.name,
+                description: formData.description,
+                price: parsedPrice,
+                stock: parsedStock,
+                categoryId: formData.categoryId,
+                images: imagesToSubmit,
             };
 
-            const response = await fetch(url, {
-                method,
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(submitData),
-            });
-
-            if (response.ok) {
-                await fetchProducts();
-                setShowModal(false);
-                resetForm();
+            let response;
+            if (editing) {
+                response = await fetch(`/api/admin/product/${editing.id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(productData),
+                });
             } else {
-                alert('Алдаа гарлаа');
+                response = await fetch('/api/admin/product', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(productData),
+                });
             }
-        } catch (error) {
-            console.error('Error saving product:', error);
-            alert('Алдаа гарлаа');
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Бүтээгдэхүүнийг хадгалахад алдаа гарлаа.');
+            }
+
+            alert(`Бүтээгдэхүүн амжилттай ${editing ? 'засагдлаа' : 'нэмэгдлээ'}!`);
+            setShowModal(false);
+            resetForm();
+            fetchProducts();
+        } catch (err: any) {
+            setError(err.message);
+            console.error('Алдаа:', err);
+        } finally {
+            setLoading(false);
         }
     };
 
     const handleDelete = async (id: number) => {
-        if (!confirm('Бүтээгдэхүүнийг устгах уу?')) return;
+        if (!confirm('Бүтээгдэхүүнийг устгах уу? Энэ үйлдлийг буцаах боломжгүй!')) return;
 
         try {
             const response = await fetch(`/api/admin/product/${id}`, {
@@ -126,13 +158,15 @@ const AdminProductPage = () => {
             });
 
             if (response.ok) {
-                await fetchProducts();
+                alert('Бүтээгдэхүүн амжилттай устгагдлаа.');
+                fetchProducts();
             } else {
-                alert('Устгахад алдаа гарлаа');
+                const errorData = await response.json();
+                alert(errorData.error || 'Устгахад алдаа гарлаа.');
             }
         } catch (error) {
             console.error('Error deleting product:', error);
-            alert('Устгахад алдаа гарлаа');
+            alert('Устгахад сүлжээний алдаа гарлаа.');
         }
     };
 
@@ -146,10 +180,7 @@ const AdminProductPage = () => {
                 stock: product.stock.toString(),
                 categoryId: product.categoryId.toString(),
             });
-            // Set existing images or fallback to single imageUrl
-            const existingImages =
-                product.images?.map((img) => img.imageUrl) ||
-                (product.imageUrl ? [product.imageUrl] : []);
+            const existingImages = product.images?.map((img) => img.imageUrl) || [];
             setProductImages(existingImages);
         } else {
             setEditing(null);
@@ -167,8 +198,10 @@ const AdminProductPage = () => {
             categoryId: '',
         });
         setProductImages([]);
+        setError(null);
         setEditing(null);
     };
+
     const filteredProducts = products.filter((product) => {
         const matchesSearch =
             product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -262,7 +295,6 @@ const AdminProductPage = () => {
                     <table className="min-w-full divide-y divide-gray-200">
                         <thead className="bg-gray-50">
                             <tr>
-
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Бүтээгдэхүүн
                                 </th>
@@ -292,7 +324,7 @@ const AdminProductPage = () => {
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="flex items-center">
                                             <img
-                                                src={product.imageUrl}
+                                                src={product.images && product.images.length > 0 ? product.images[0].imageUrl : product.imageUrl || '/placeholder.png'}
                                                 alt={product.name}
                                                 className="w-10 h-10 rounded object-cover mr-4"
                                             />
@@ -308,7 +340,7 @@ const AdminProductPage = () => {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                            {product.category.name}
+                                            {product.category?.name || 'Ангилалгүй'}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -320,8 +352,8 @@ const AdminProductPage = () => {
                                                 product.stock > 10
                                                     ? 'bg-green-100 text-green-800'
                                                     : product.stock > 0
-                                                      ? 'bg-yellow-100 text-yellow-800'
-                                                      : 'bg-red-100 text-red-800'
+                                                    ? 'bg-yellow-100 text-yellow-800'
+                                                    : 'bg-red-100 text-red-800'
                                             }`}
                                         >
                                             {product.stock} ширхэг
@@ -386,7 +418,7 @@ const AdminProductPage = () => {
                                 {Array.from(
                                     { length: Math.min(5, totalPages) },
                                     (_, i) => {
-                                        let pageNum; 
+                                        let pageNum: number = 1; 
                                         if (totalPages <= 5) {
                                             pageNum = i + 1;
                                         } else if (currentPage <= 3) {
@@ -396,21 +428,21 @@ const AdminProductPage = () => {
                                         } else {
                                             pageNum = currentPage - 2 + i;
                                         }
-                                        return pageNum; 
+                                        return (
+                                            <button
+                                                key={pageNum} // Энд page-ийг pageNum-ээр солилоо
+                                                onClick={() => setCurrentPage(pageNum)} // Энд page-ийг pageNum-ээр солилоо
+                                                className={`px-3 py-1 text-sm rounded ${
+                                                    currentPage === pageNum // Энд page-ийг pageNum-ээр солилоо
+                                                        ? 'bg-blue-600 text-white'
+                                                        : 'text-gray-700 hover:bg-gray-100'
+                                                }`}
+                                            >
+                                                {pageNum} {/* Энд page-ийг pageNum-ээр солилоо */}
+                                            </button>
+                                        );
                                     }
-                                ).map((page) => ( 
-                                    <button
-                                        key={page} 
-                                        onClick={() => setCurrentPage(page)}
-                                        className={`px-3 py-1 text-sm rounded ${
-                                            currentPage === page
-                                                ? 'bg-blue-600 text-white'
-                                                : 'text-gray-700 hover:bg-gray-100'
-                                        }`}
-                                    >
-                                        {page}
-                                    </button>
-                                ))}
+                                )}
                             </div>
 
                             <button
@@ -441,14 +473,21 @@ const AdminProductPage = () => {
             )}
             {/* Modal */}
             {showModal && (
-                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-                    <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center">
+                    <div className="relative p-5 border w-96 shadow-lg rounded-md bg-white">
                         <div className="mt-3">
                             <h3 className="text-lg font-medium text-gray-900 mb-4">
                                 {editing
                                     ? 'Бүтээгдэхүүн засах'
                                     : 'Бүтээгдэхүүн нэмэх'}
                             </h3>
+
+                            {error && (
+                                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                                    <strong className="font-bold">Алдаа!</strong>
+                                    <span className="block sm:inline"> {error}</span>
+                                </div>
+                            )}
 
                             <form onSubmit={handleSubmit} className="space-y-4">
                                 <div>
