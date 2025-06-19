@@ -46,10 +46,8 @@ const AdminMenu = () => {
     ];
 
     return (
-        <div className="flex flex-col h-screen gap-5 p-6  bg-white">
-            <div className="text-lg font-bold flex justify-center mb-8 text-gray-700">
-                <Link href="/admin">E-Commerce</Link>
-            </div>
+        <div className="fixed left-0 flex flex-col h-screen gap-5 p-6  bg-white">
+            
 
             {sideMenuItems.map((item, index) => {
                 const isActive = pathname === item.href;

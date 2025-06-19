@@ -6,7 +6,7 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
-  relationMode = "prisma"
+  relationMode = "foreignKeys"
 }
 
 model User{
@@ -29,7 +29,7 @@ model Product{
   name String
   category Category @relation(fields: [categoryId], references: [id])
   categoryId Int 
-  description String
+  description String? @db.Text
   price Float
   stock Int
   imageUrl String

@@ -1,3 +1,4 @@
+import { Search } from 'lucide-react';
 import Image from 'next/image';
 
 const SearchBar = () => {
@@ -9,7 +10,7 @@ const SearchBar = () => {
                 className="pl-2 bg-transparent outline-none"
             />
             <button className="cursor-pointer mr-3">
-                <Image src="/search-icon.png" alt="" width={16} height={16} />
+                <Search width={16} height={16} />
             </button>
         </form>
     );

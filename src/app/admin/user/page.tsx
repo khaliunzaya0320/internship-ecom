@@ -214,7 +214,7 @@ const AdminUserPage = () => {
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="flex items-center text-sm text-gray-900">
                                             <ShoppingCart className="w-4 h-4 mr-1 text-gray-400" />
-                                            {user._count?.cartItems || 0} барааь
+                                            {user._count?.cartItems || 0} бараа
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
@@ -225,10 +225,9 @@ const AdminUserPage = () => {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="text-sm font-semibold text-gray-900">
-                                            ₮
                                             {(
                                                 user.totalSpent || 0
-                                            ).toLocaleString()}
+                                            ).toLocaleString()}₮
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -240,7 +239,7 @@ const AdminUserPage = () => {
                                         </Link>
                                     </td>
                                 </tr>
-                            ))}{' '}
+                            ))}
                         </tbody>
                     </table>
                 </div>

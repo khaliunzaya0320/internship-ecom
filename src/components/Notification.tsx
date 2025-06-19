@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useNotification, NotificationItem } from '@/context/NotificationContext';
-import { Bell, XCircle, CheckCircle, Info, AlertTriangle, Trash2 } from 'lucide-react'; 
+import { Trash2 } from 'lucide-react'; 
 
 export default function Notification() {
     const { notifications, markAsRead, clearNotifications } = useNotification();
@@ -11,20 +11,7 @@ export default function Notification() {
         ? notifications.filter(notif => notif.read)
         : notifications.filter(notif => !notif.read); 
 
-    const getIcon = (type: NotificationItem['type']) => {
-        switch (type) {
-            case 'success':
-                return <CheckCircle className="w-5 h-5 text-green-500" />;
-            case 'error':
-                return <XCircle className="w-5 h-5 text-red-500" />;
-            case 'info':
-                return <Info className="w-5 h-5 text-blue-500" />;
-            case 'warning':
-                return <AlertTriangle className="w-5 h-5 text-yellow-500" />;
-            default:
-                return <Bell className="w-5 h-5 text-gray-500" />;
-        }
-    };
+ 
 
     const getBorderColor = (type: NotificationItem['type']) => {
         switch (type) {
@@ -37,7 +24,7 @@ export default function Notification() {
     };
 
     return (
-        <div className="container mx-auto p-4 max-w-2xl">
+        <div className="container mx-auto p-4 min-w-64">
             <h1 className="text-2xl font-bold mb-6 text-gray-800">Мэдэгдлүүд</h1>
 
             <div className="flex justify-between items-center mb-4">
@@ -78,9 +65,7 @@ export default function Notification() {
                             key={notif.id}
                             className={`flex items-start gap-3 p-4 border-l-4 rounded-lg shadow-sm bg-white ${getBorderColor(notif.type)}`}
                         >
-                            <div className="flex-shrink-0 mt-0.5">
-                                {getIcon(notif.type)}
-                            </div>
+                            
                             <div className="flex-1">
                                 <p className={`font-medium ${notif.read ? 'text-gray-500' : 'text-gray-800'}`}>
                                     {notif.message}

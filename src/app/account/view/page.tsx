@@ -38,7 +38,7 @@ const ViewedProductsPage = () => {
     }
 
     return (
-        <div className="m-6">
+        <div className="m-6 min-w-full">
             <h1 className="primary-header mb-4">Үзсэн бүтээгдэхүүн</h1>
 
             <p className="text-gray-600 mb-6">
@@ -46,7 +46,7 @@ const ViewedProductsPage = () => {
             </p>
 
             {viewedProducts.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
                     {viewedProducts.map((item) => (
                         <div
                             key={`${item.userId}-${item.productId}`}
@@ -64,7 +64,7 @@ const ViewedProductsPage = () => {
                     ))}
                 </div>
             ) : (
-                <div className="text-center py-12">
+                <div className="flex flex-col justify-center items-center w-4/5 py-12 gap-4">
                     <Eye className="w-16 h-16 mx-auto mb-4 text-gray-400" />
                     <h3 className="text-lg font-medium text-gray-900 mb-2">
                         Үзсэн бараа байхгүй байна
@@ -74,11 +74,10 @@ const ViewedProductsPage = () => {
                     </p>
                     <a
                         href="/shop"
-                        className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                    >
+                        className="default-button">
                         Дэлгүүр үзэх
                     </a>
-                </div>
+                </div>               
             )}
         </div>
     );

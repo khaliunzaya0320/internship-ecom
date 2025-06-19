@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { Bell, Heart, ShoppingCart, User, LogOut, Package } from 'lucide-react';
 import { useNotification } from '@/context/NotificationContext'; 
 
+
 const Menu = () => {
     const { data: session, status } = useSession();
     const pathname = usePathname();
@@ -14,10 +15,9 @@ const Menu = () => {
     const [accountOpen, setAccountOpen] = useState(false); 
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    const { notifications } = useNotification(); 
+    const { notifications, markAsRead, clearNotifications } = useNotification();
     const unreadNotificationsCount = notifications.filter(notif => !notif.read).length;
-    const latestNotifications = notifications.slice(0, 3); 
-
+    
     const menuItems = [
         {
             href: '/order',
@@ -31,7 +31,7 @@ const Menu = () => {
         },
         {
             href: '/account/wishlist',
-            label: 'Таалагдсан',
+            label: 'Хадгалсан',
             icon: <Heart className="menu-icon" />,
             authRequired: true,
         },
@@ -67,7 +67,7 @@ const Menu = () => {
             className="flex gap-6 text-sm font-medium items-center relative text-gray-200"
             ref={dropdownRef}
         >
-            {/* Notification dropdown - зөвхөн нэвтэрсэн хэрэглэгчдэд харуулах */}
+            {/* Notification dropdown */}
             {session && (
                 <div className="relative">
                     <button
@@ -88,29 +88,41 @@ const Menu = () => {
                     </button>
 
                     {open && (
-                        <div className="absolute -right-36 mt-4 w-80 shadow-xl border rounded-md z-50 p-4 bg-white font-normal">
+                        <div className="absolute -right-80 mt-4 w-96 shadow-2xl border rounded-md z-50 p-4 bg-white font-normal">
                             <h3 className="font-semibold text-gray-800 mb-2">Шинэ мэдэгдлүүд</h3>
-                            {latestNotifications.length > 0 ? (
+                            {unreadNotificationsCount > 0 ? (
                                 <ul className="space-y-2">
-                                    {latestNotifications.map((notif) => (
-                                        <li key={notif.id} className={`border-b border-gray-100 pb-2 ${notif.read ? 'text-gray-500' : 'text-gray-800'}`}>
+                                    {notifications.filter(notif => !notif.read).slice(0, 5).map((notif) => (
+                                        <li key={notif.id} className={`border-b border-gray-100 pb-2 ${notif.read ? 'text-gray-500' : 'text-gray-700'}`}>
                                             <p className="text-sm font-medium">{notif.message}</p>
-                                            <p className="text-xs text-gray-400">{notif.date}</p>
+                                            <div className='flex flex-row justify-between items-center'>
+                                                <p className="text-xs text-gray-400">{notif.date}</p>
+                                                <button
+                                                    onClick={() => markAsRead(notif.id)}
+                                                    className="text-blue-500 hover:underline text-xs mt-1"
+                                                >
+                                                    Уншсан
+                                                </button>
+                                            </div>
                                         </li>
                                     ))}
                                 </ul>
                             ) : (
                                 <p className="text-center text-gray-500 text-sm py-4">Шинэ мэдэгдэл байхгүй.</p>
                             )}
-                            <div className="mt-4 text-right">
-                                <Link
-                                    href="" 
-                                    className="text-rose-500 hover:underline font-medium text-sm"
-                                    onClick={() => setOpen(false)} 
-                                >
-                                    Бүгдийг харах
-                                </Link>
-                            </div>
+                            {notifications.length > 0 && (
+                                <div className="mt-4 text-right">
+                                    <button
+                                        onClick={() => {
+                                            clearNotifications(); 
+                                            setOpen(false); 
+                                        }}
+                                        className="text-red-500 hover:underline font-medium text-sm"
+                                        >
+                                        Бүх мэдэгдлийг цэвэрлэх
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>
@@ -154,7 +166,7 @@ const Menu = () => {
                         <span>{session.user?.name || 'Хэрэглэгч'}</span>
                     </button>{' '}
                     {accountOpen && (
-                        <div className="absolute -right-8 mt-4 w-48 shadow-xl border rounded-md z-50 bg-white font-normal">
+                        <div className="absolute -right-8 mt-4 w-48 shadow-2xl border rounded-md z-50 bg-white text-gray-800 font-normal">
                             <ul className="">
                                 <li>
                                     <Link
